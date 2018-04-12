@@ -18,7 +18,7 @@ class App extends Component {
         'Sampsa',
         'Tuomas'
       ],
-      
+      valittuKavija: null,
       satamat: [
         '1. Helsinki, FIHEL, Etelä',
         '2. Helsinki, FIHEL, Hernesaari ja Länsi',
@@ -57,61 +57,137 @@ class App extends Component {
         '35. Muu Satama',
         '36. Muu ulkomainen satama'        
       ],
+      valittuSatama: null,
       palvelut: [
         'Laivakäynti',
         'Spotti',
         'Kuljetus',
         'Asiointipalvelut'
       ],
-      toimitus: [
-        'Lehdet',
-        'Vapaavahti tai muu MEPA-materiaali',
-        'Videot',
-        'Kirjat tilatut',
-        'Kirjastovaihto',
-        'Info tai muu tiedottaminen',
-        'Vierailu/tutustuminen',
-        'Treeni tai työhyvinvointipalvelu'
-      ]
+      valittuPalvelu: null,
+      toimitukset: [
+        {nimi: 'Lehdet', toimitettu: false},
+        {nimi: 'Vapaavahti tai muu MEPA-materiaali', toimitettu:false},
+        {nimi: 'Videot', toimitettu: false},
+        {nimi: 'Kirjat tilatut', toimitettu: false},
+        {nimi: 'Kirjastovaihto', toimitettu: false},
+        {nimi: 'Info tai muu tiedottaminen', toimitettu: false},
+        {nimi: 'Vierailu/tutustuminen', toimitettu: false},
+        {nimi: 'Treeni tai työhyvinvointipalvelu', toimitettu: false},
+      ],
+      valitutToimitukset: []
     }
   }
   
-  
+  vaihdaKavija = (e) => {
+    this.setState({
+      valittuKavija: e.target.value
+    });
+  }
+
+  vaihdaSatama = (e) => {
+    this.setState({
+      valittuSatama: e.target.value
+    })
+  }
+
+  vaihdaPalvelu = (e) => {
+    this.setState({
+      valittuPalvelu: e.target.value
+    })
+  }
+
+  vaihdaToimitukset = (e) => {
+    const vanhatToimitukset = this.state.toimitukset
+    console.log(vanhatToimitukset)
+    const checkBox = document.getElementById("toimitusBox")
+    console.log(checkBox)
+    const tsekattu = checkBox.checked
+    console.log(tsekattu)
+    const uudetToimitukset = vanhatToimitukset.map ((t) => {
+      if(t.nimi === e.target.value) {
+        t.nimi = t.nimi
+        t.toimitettu = tsekattu
+        console.log(t.nimi)
+        console.log(t.toimitettu)
+      } else {
+        t.nimi = t.nimi
+        t.toimitettu = t.toimitettu
+      }
+    })
+    this.setState({
+      valitutToimitukset: uudetToimitukset
+    })
+  }
   
   render() {
-
-    const kavijanValinta = () => this.state.kavijat.map (k => 
-    <div key={k}>
-      <input type="radio" id={k}
-        name="kavija" value="kavija" />
-      <label htmlFor={k}>"{k}"</label>
+    const kavijat = () => this.state.kavijat.map ((k, index) => 
+    <div key={index}>
+      <input type="radio"
+        name="kavija" value={k}
+        onChange={this.vaihdaKavija}/>
+      {k}
     </div>
-    )    
-    
-    const satamat = () => this.state.satamat.map (m =>
-      <p key={m}>{m}</p>
     )
 
-    const myFunction = () => {
+    const satamat = () => this.state.satamat.map (m =>
+      <button key={m} 
+      className = "dropdown-button" 
+      onClick={this.vaihdaSatama} 
+      value={m} >
+      {m}
+      </button>
+    )
+
+    const avaaSatamat = () => {
       document.getElementById("sataman_valinta").classList.toggle("show")
+    }
+
+    const palvelut = () => this.state.palvelut.map ((p, index) => 
+    <div key={index}>
+      <input type="radio"
+        name="palvelu" value={p}
+        onChange={this.vaihdaPalvelu}/>
+      {p}
+    </div>
+    )
+
+    const toimitukset = () => this.state.toimitukset.map ((t, index) => 
+    <div key={index}>
+      <p>{t.nimi}:  <input type="checkbox" value={t.nimi} id="toimitusBox" onChange={this.vaihdaToimitukset} /> </p>
+    </div>
+    )
+
+    const avaaToimitukset = () => {
+      document.getElementById("toimitusten_valinta").classList.toggle("show")
     }
 
     return (
       <div>
         <form>
-          <h1>Kävijä: </h1>
+          <h1>Kävijä:</h1>
           <div>
-          {kavijanValinta()}
-          </div>          
+            {kavijat()}
+          </div>
         </form>
-     
-      <div className="dropdown">
-      <button onClick={() => myFunction()} 
-      className="dropbtn">Valitse satamat</button>
+        <div className="dropdown">
+          <button onClick={() => avaaSatamat()} className="dropbtn">Valitse satama</button>
           <div id="sataman_valinta" className="dropdown-content">
             {satamat()}
           </div>
-      </div>
+        <form>
+          <h1>Palvelu:</h1>
+          <div>
+            {palvelut()}
+          </div>
+        </form>
+        <div className="dropdown">
+          <button onClick={() => avaaToimitukset()} className="dropbtn">Valitse toimitukset</button>
+          <div id="toimitusten_valinta" className="dropdown-content">
+            {toimitukset()}
+          </div>
+        </div>
+        </div>
       </div>
     )
   }
