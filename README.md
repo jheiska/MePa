@@ -1,0 +1,2 @@
+# MePa
+Merimiespalvelun laivakäyntisovellus
