@@ -1,10 +1,14 @@
 import React from 'react';
 
-const Valikko = ({otsikko, lista}) => {
+const DropdownValikko = ({otsikko, toggleri, listaaja}) => {
+    return (
     <div className="dropdown">
-          <button onClick={() => avaaToimitukset()} className="dropbtn">{otsikko}</button>
-          <div id="toimitusten_valinta" className="dropdown-content">
-            {toimitukset()}
-          </div>
+            <button onClick={toggleri} className="dropbtn">{otsikko}</button>
+            <div id={otsikko} className="dropdown-content">
+              {listaaja}
+            </div>
     </div>
+    )
 }
+
+export default DropdownValikko

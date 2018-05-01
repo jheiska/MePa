@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css'
 import Checkbox from './components/Checkbox'
+import DropdownValikko from './components/DropdownValikko'
 
 class App extends Component {
   constructor(props) {
@@ -19,7 +20,6 @@ class App extends Component {
         'Sampsa',
         'Tuomas'
       ],
-      valittuKavija: null,
       satamat: [
         '1. Helsinki, FIHEL, Etelä',
         '2. Helsinki, FIHEL, Hernesaari ja Länsi',
@@ -58,14 +58,12 @@ class App extends Component {
         '35. Muu Satama',
         '36. Muu ulkomainen satama'        
       ],
-      valittuSatama: null,
       palvelut: [
         'Laivakäynti',
         'Spotti',
         'Kuljetus',
         'Asiointipalvelut'
       ],
-      valittuPalvelu: null,
       toimitukset: [
         'Lehdet',
         'Vapaavahti tai muu MEPA-materiaali',
@@ -100,52 +98,39 @@ class App extends Component {
   )
 
   luoCheckboxiLista = (lista) => lista.map(m => this.luoCheckboxi(m))
-  
-  vaihdaKavija = (e) => {
-    this.setState({
-      valittuKavija: e.target.value
-    });
+
+  avaaKavijat = () => {
+    document.getElementById("Kavijat").classList.toggle("show")
   }
 
-  vaihdaSatama = (e) => {
-    this.setState({
-      valittuSatama: e.target.value
-    })
+  avaaSatamat = () => {
+    document.getElementById("Satamat").classList.toggle("show")
   }
 
-  vaihdaPalvelu = (e) => {
-    this.setState({
-      valittuPalvelu: e.target.value
-    })
+  avaaPalvelut = () => {
+    document.getElementById("Palvelut").classList.toggle("show")
+  }
+
+  avaaToimitukset = () => {
+    document.getElementById("Toimitukset").classList.toggle("show")
   }
 
   render() {
 
-    const avaaKavijat = () => {
-      document.getElementById("kavijoiden_valinta").classList.toggle("show")
-    }
-
-    const avaaSatamat = () => {
-      document.getElementById("sataman_valinta").classList.toggle("show")
-    }
-
-    const avaaPalvelut = () => {
-      document.getElementById("palveluiden_valinta").classList.toggle("show")
-    }
-
-    const avaaToimitukset = () => {
-      document.getElementById("toimitusten_valinta").classList.toggle("show")
-    }
-
     return (
       <div>
-          <div className="dropdown">
-            <button onClick={() => avaaKavijat()} className="dropbtn">Kävijät</button>
-            <div id="kavijoiden_valinta" className="dropdown-content">
-              {this.luoCheckboxiLista(this.state.kavijat)}
-            </div>
-          </div>
-        <div className="dropdown">
+        <DropdownValikko otsikko= "Kavijat" toggleri= {this.avaaKavijat} listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
+        <DropdownValikko otsikko= "Satamat" toggleri= {this.avaaSatamat} listaaja= {this.luoCheckboxiLista(this.state.satamat)} />
+        <DropdownValikko otsikko= "Palvelut" toggleri= {this.avaaPalvelut} listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
+        <DropdownValikko otsikko= "Toimitukset" toggleri= {this.avaaToimitukset} listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
+      </div>
+    )
+  }
+}
+
+
+/*        
+<div className="dropdown">
           <button onClick={() => avaaSatamat()} className="dropbtn">Valitse satama</button>
           <div id="sataman_valinta" className="dropdown-content">
             {this.luoCheckboxiLista(this.state.satamat)}
@@ -163,10 +148,7 @@ class App extends Component {
             {this.luoCheckboxiLista(this.state.toimitukset)}
           </div>
         </div>
+*/
 
-      </div>
-    )
-  }
-}
 
 export default App;
