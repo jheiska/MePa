@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css'
 import Checkbox from './components/Checkbox'
 import DropdownValikko from './components/DropdownValikko'
+import Slideri from './components/Slideri'
+import Clicker from './components/Clicker'
 
 class App extends Component {
   constructor(props) {
@@ -65,30 +67,30 @@ class App extends Component {
         'Asiointipalvelut'
       ],
       toimitukset: [
-        'Lehdet',
-        'Vapaavahti tai muu MEPA-materiaali',
         'Videot',
         'Kirjat tilatut',
         'Kirjastovaihto',
         'Info tai muu tiedottaminen',
         'Vierailu/tutustuminen',
-        'Treeni tai työhyvinvointipalvelu'
+        'Treeni tai työhyvinvointipalvelu',
+        'Lehdet',
+        'Vapaavahti tai muu MEPA-materiaali'        
       ]
     }
   }
 
   componentWillMount = () => {
-    this.selectedCheckboxes = new Set();
+    this.selectedCheckboxes = new Set()
   }
 
   toggleCheckbox = (label) => {
     if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label);
+      this.selectedCheckboxes.delete(label)
     } else {
-      this.selectedCheckboxes.add(label);
+      this.selectedCheckboxes.add(label)
     }
   }
-  
+
   luoCheckboxi = (label) => (
     <Checkbox
             label={label}
@@ -103,10 +105,22 @@ class App extends Component {
 
     return (
       <div>
-        <DropdownValikko otsikko= "Kavijat" listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
+        <div>
+        <DropdownValikko otsikko= "Kävijat" listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
         <DropdownValikko otsikko= "Satamat" listaaja= {this.luoCheckboxiLista(this.state.satamat)} />
         <DropdownValikko otsikko= "Palvelut" listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
         <DropdownValikko otsikko= "Toimitukset" listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
+        <Slideri />
+        </div>
+        <div>
+        <Clicker label="Henkilöiden määrä: " />
+        </div>
+        <div>
+        <Clicker label="Keskustelut: " />
+        </div>
+        <div>
+        <Clicker label="Kuljetetut: " />
+        </div>
       </div>
     )
   }
