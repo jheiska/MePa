@@ -19,11 +19,11 @@ class Clicker extends Component {
     const { label } = this.props;
 
     return (
-      <div class="wrapper">
+      <div className="wrapper">
         {label} 
-        <button class="button" onClick={this.DecreaseItem}>-</button>
+        <button className="button" onClick={this.DecreaseItem}>-</button>
         {this.state.clicks}
-        <button class="button" onClick={this.IncrementItem}>+</button>
+        <button className="button" onClick={this.IncrementItem}>+</button>
       </div>
     )
   }
