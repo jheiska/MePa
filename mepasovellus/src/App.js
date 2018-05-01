@@ -99,56 +99,17 @@ class App extends Component {
 
   luoCheckboxiLista = (lista) => lista.map(m => this.luoCheckboxi(m))
 
-  avaaKavijat = () => {
-    document.getElementById("Kavijat").classList.toggle("show")
-  }
-
-  avaaSatamat = () => {
-    document.getElementById("Satamat").classList.toggle("show")
-  }
-
-  avaaPalvelut = () => {
-    document.getElementById("Palvelut").classList.toggle("show")
-  }
-
-  avaaToimitukset = () => {
-    document.getElementById("Toimitukset").classList.toggle("show")
-  }
-
   render() {
 
     return (
       <div>
-        <DropdownValikko otsikko= "Kavijat" toggleri= {this.avaaKavijat} listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
-        <DropdownValikko otsikko= "Satamat" toggleri= {this.avaaSatamat} listaaja= {this.luoCheckboxiLista(this.state.satamat)} />
-        <DropdownValikko otsikko= "Palvelut" toggleri= {this.avaaPalvelut} listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
-        <DropdownValikko otsikko= "Toimitukset" toggleri= {this.avaaToimitukset} listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
+        <DropdownValikko otsikko= "Kavijat" listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
+        <DropdownValikko otsikko= "Satamat" listaaja= {this.luoCheckboxiLista(this.state.satamat)} />
+        <DropdownValikko otsikko= "Palvelut" listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
+        <DropdownValikko otsikko= "Toimitukset" listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
       </div>
     )
   }
 }
-
-
-/*        
-<div className="dropdown">
-          <button onClick={() => avaaSatamat()} className="dropbtn">Valitse satama</button>
-          <div id="sataman_valinta" className="dropdown-content">
-            {this.luoCheckboxiLista(this.state.satamat)}
-          </div>
-        </div>
-        <div className="dropdown">
-          <button onClick={() => avaaPalvelut()} className="dropbtn">Palvelut</button>
-          <div id="palveluiden_valinta" className="dropdown-content">
-            {this.luoCheckboxiLista(this.state.palvelut)}
-          </div>
-        </div>
-        <div className="dropdown">
-          <button onClick={() => avaaToimitukset()} className="dropbtn">Valitse toimitukset</button>
-          <div id="toimitusten_valinta" className="dropdown-content">
-            {this.luoCheckboxiLista(this.state.toimitukset)}
-          </div>
-        </div>
-*/
-
 
 export default App;

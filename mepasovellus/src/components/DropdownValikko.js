@@ -1,6 +1,9 @@
 import React from 'react';
 
-const DropdownValikko = ({otsikko, toggleri, listaaja}) => {
+const DropdownValikko = ({otsikko, listaaja}) => {
+    
+    const toggleri = () => document.getElementById(otsikko).classList.toggle("show")
+
     return (
     <div className="dropdown">
             <button onClick={toggleri} className="dropbtn">{otsikko}</button>
