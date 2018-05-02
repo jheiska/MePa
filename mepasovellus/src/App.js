@@ -62,6 +62,7 @@ class App extends Component {
         '36. Muu ulkomainen satama'        
       ],
       muuSatama: '',
+      valittuSatama: '',
       laivat: [
         '1. Ahti',
         '2. Aila',
@@ -231,7 +232,9 @@ class App extends Component {
         'Vapaavahti tai muu MEPA-materiaali'        
       ],
       merenKulkijoidenViesti: '',
-      mepanViesti: ''
+      mepanViesti: '',
+      laivaLimiter: '',
+      satamaLimiter: ''
     }
   }
 
@@ -284,24 +287,75 @@ class App extends Component {
     })
   }
 
-  luoLaivaLista = () => this.state.laivat.map ((laiva, index) => 
-    <div key={index}>
-       <input type="radio"
-         name="laiva" value={laiva}
-         onChange={this.vaihdaLaiva}/>
-       {laiva}
-      </div>
-  )    
+  handleLaivaLimiter = (event) => {
+    this.setState({ laivaLimiter: event.target.value})
+  }
 
-  luoSatamaLista = () => this.state.satamat.map ((satama, index) => 
-    <div key={index}>
-       <input type="radio"
-         name="satama" value={satama}
-         onChange={this.vaihdaLaiva}/>
-       {satama}
-      </div>
-  )
+  handleSatamaLimiter = (event) => {
+    this.setState({ satamaLimiter: event.target.value})
+  }
 
+  luoLaivaLista = () => {
+    const laivatToShow =
+    this.state.laivaLimiter.length === 0 ?
+    this.state.laivat :
+    this.state.laivat.filter(laiva => 
+      laiva.toLowerCase().includes(this.state.laivaLimiter.toLowerCase()))
+
+    return (
+      laivatToShow.map ((laiva, index) => 
+        <div key={index}>
+          <input type="radio"
+            name="laiva" value={laiva}
+            onChange={this.vaihdaLaiva}/>
+          {laiva}
+        </div>
+      )
+    )
+    }
+
+  laivaRajoittaja = () => {
+    return (
+      <div>
+      <input 
+            value={this.state.laivaLimiter}
+            onChange={this.handleLaivaLimiter} 
+          />
+      </div>
+    )
+  }
+     
+
+  luoSatamaLista = () => {
+    const satamatToShow =
+    this.state.satamaLimiter.length === 0 ?
+    this.state.satamat :
+    this.state.satamat.filter(satama => 
+      satama.toLowerCase().includes(this.state.satamaLimiter.toLowerCase()))
+
+    return (
+      satamatToShow.map ((satama, index) =>
+        <div key={index}>
+          <input type="radio"
+           name="satama" value={satama}
+           onChange={this.vaihdaSatama}/>
+        {satama}
+        </div>
+      )
+    )
+  }
+
+  satamaRajoittaja = () => {
+    return (
+      <div>
+      <input 
+            value={this.state.satamaLimiter}
+            onChange={this.handleSatamaLimiter} 
+          />
+      </div>
+    )
+  }
+  
   handleFormChange = (event) => {
     this.setState({ [event.target.name]: event.target.value })
   }
@@ -316,8 +370,8 @@ class App extends Component {
       <div>
         <div>
           <DropdownValikko otsikko= "Kävijat" listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
-          <DropdownValikko otsikko= "Satamat" listaaja= {this.luoSatamaLista()} />
-          <DropdownValikko otsikko= "Laivat" listaaja= {this.luoLaivaLista()} />
+          <DropdownValikko otsikko= "Satamat" listaaja= {this.luoSatamaLista()} rajoittaja= {this.satamaRajoittaja()} />
+          <DropdownValikko otsikko= "Laivat" listaaja= {this.luoLaivaLista()} rajoittaja= {this.laivaRajoittaja()} />
           <DropdownValikko otsikko= "Palvelut" listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
           <DropdownValikko otsikko= "Toimitukset" listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
           <Slideri />
