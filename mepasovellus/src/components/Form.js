@@ -6,12 +6,13 @@ const Form = ({ onSubmit, handleChange, value, aihe, otsikko }) => {
       <h2>{otsikko}</h2>
 
       <form onSubmit={onSubmit}>
-        <input
+        <textarea
           value={value}
           name={aihe}
           onChange={handleChange}
+          cols="50"
+          rows="5"
         />
-        <button>tallenna</button>
       </form>
     </div>
   )

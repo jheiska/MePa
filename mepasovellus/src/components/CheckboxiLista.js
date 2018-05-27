@@ -3,13 +3,8 @@ import Checkbox from './Checkbox'
 
 class CheckboxiLista extends Component {
 
-    state = {
-        list: []
-      }
-
     componentWillMount = () => {
         this.selectedCheckboxes = new Set()
- //       this.setState({list: this.props.lista})
       }
     
     toggleCheckbox = (label) => {
@@ -17,14 +12,15 @@ class CheckboxiLista extends Component {
           this.selectedCheckboxes.delete(label)
       } else {
           this.selectedCheckboxes.add(label)
+//          console.log(this.selectedCheckboxes)
       }
     }
     
     luoCheckboxi = (label) => (
       <Checkbox
         label={label}
-        handleCheckboxChange={this.toggleCheckbox}
         key={label}
+        handleCheckboxChange={this.toggleCheckbox}
       />
     )
 

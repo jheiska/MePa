@@ -13,23 +13,23 @@ const handle = (props) => {
     <Tooltip
       prefixCls="rc-slider-tooltip"
       overlay={value}
-      visible={dragging}
+      visible={true}
       placement="top"
       key={index}
     >
       <Handle value={value} {...restProps} />
     </Tooltip>
-  ) 
+  )
 } 
 
-const wrapperStyle = { width: 400, margin: 50 } 
+const wrapperStyle = { width: 400, margin: 40 } 
 
 const Slideri = () => {
   return (
-<div>
+  <div>
     <div style={wrapperStyle}>
-      <p>Käynnin kesto (minuuttia)</p>
       <Slider min={0} max={300} defaultValue={15} step={5} handle={handle} />
+      <p>{handle.value}</p>
     </div>
   </div>
   )

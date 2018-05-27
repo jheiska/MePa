@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import './App.css'
 import DropdownValikko from './components/DropdownValikko'
 import Slideri from './components/Slideri'
 import Clicker from './components/Clicker'
 import Form from './components/Form'
-import CheckboxiLista from './components/CheckboxiLista';
+import CheckboxiLista from './components/CheckboxiLista'
+import PaivanValitsija from './components/PaivanValitsija'
 
 class App extends Component {
   constructor(props) {
@@ -269,7 +270,7 @@ class App extends Component {
 
     return (
       laivatToShow.map ((laiva, index) => 
-        <div key={index}>
+        <div key={index} className="dropbtn">
           <input type="radio"
             name="laiva" value={laiva}
             onChange={this.vaihdaLaiva}/>
@@ -284,7 +285,8 @@ class App extends Component {
       <div>
       <input 
             value={this.state.laivaLimiter}
-            onChange={this.handleLaivaLimiter} 
+            onChange={this.handleLaivaLimiter}
+            className="rajoittaja"
           />
       </div>
     )
@@ -300,7 +302,7 @@ class App extends Component {
 
     return (
       satamatToShow.map ((satama, index) =>
-        <div key={index}>
+        <div key={index} className="dropbtn">
           <input type="radio"
            name="satama" value={satama}
            onChange={this.vaihdaSatama}/>
@@ -315,7 +317,8 @@ class App extends Component {
       <div>
       <input 
             value={this.state.satamaLimiter}
-            onChange={this.handleSatamaLimiter} 
+            onChange={this.handleSatamaLimiter}
+            className="rajoittaja"
           />
       </div>
     )
@@ -338,34 +341,56 @@ class App extends Component {
   }
 /*
   toimitukset = () => {
-    if (document.getElementById('Palvelut').selectedCheckboxes.has('Laivakäynti')){
+    if (document.getElementById('Laivakäynti').checked === false)(
+      console.log('success!')
+    )
+  }
+
+  {this.toimitukset()}
+*/
+      /*
+    if (document.getElementById('Laivakäynti').isChecked === true) {
       return <CheckboxiLista otsikko= "Toimitukset" lista={this.state.toimitukset} />
     } else return null
+*/
 
-  }
-  */
 
-//          <CheckboxiLista otsikko= "Toimitukset" lista={this.state.toimitukset} />
 
+//          
+/*
+<form onSubmit={this.handleFormSubmit}>
+</form> <button className="btn btn-default" type="submit">Save</button>
+  */       
   render() {
 
     return (
       <div>
         <div>
-          <form onSubmit={this.handleFormSubmit}>
-            <CheckboxiLista otsikko= "Kävijät" lista={this.state.kavijat} />
-            <button className="btn btn-default" type="submit">Save</button>
-          </form>
+          <h1>Mepan laivapalvelut</h1>
           <div>
-          <DropdownValikko otsikko= "Satamat" listaaja= {this.luoSatamaLista()} rajoittaja= {this.satamaRajoittaja()} />
-          </div>
-          <div>
-          <DropdownValikko otsikko= "Laivat" listaaja= {this.luoLaivaLista()} rajoittaja= {this.laivaRajoittaja()} />
-          </div>
-          <CheckboxiLista otsikko="Palvelut" lista={this.state.palvelut} />
+          <p>Lähetä lomakkeen kautta tiedot laivakäynneistäsi.</p>
 
+          <p>Laivakäyntiraporttien avulla voimme helpommin seurata palvelujemme kattavuutta sekä ohjata toimintaamme laivoille, 
+            jotka eivät ole hetkeen saaneet MEPA-palveluita. Yhtenäisten raportointikäyntäntöjen kautta saamme koottua yhteen tiedot mm. siitä, 
+            milloin kussakin aluksessa on viimeksi käyty.</p>
+          <h2>Päivämäärä</h2>
+          <PaivanValitsija selected={this.state.date} onChange={this.handleChange} />
+          </div>
+
+          <CheckboxiLista otsikko= "Kävijät" lista={this.state.kavijat} />
+           
+          <div>
+          <DropdownValikko otsikko= "Valitse satama" listaaja= {this.luoSatamaLista()} rajoittaja= {this.satamaRajoittaja()} />
+          <DropdownValikko otsikko= "Valitse laiva" listaaja= {this.luoLaivaLista()} rajoittaja= {this.laivaRajoittaja()} />
+          </div>
+          
+          <CheckboxiLista otsikko="Palvelut" lista={this.state.palvelut} />
+          <CheckboxiLista otsikko= "Toimitukset" lista={this.state.toimitukset} />
+          
+          <h2>Käynnin kesto</h2>
           <Slideri />
         </div>
+
         <div>
           <Clicker label="Henkilöiden määrä: " />
         </div>
@@ -376,11 +401,11 @@ class App extends Component {
           <Clicker label="Kuljetetut: " />
         </div>
         <div>
-          <Form onSubmit={this.saveForm} handleChange={this.handleFormChange} 
+          <Form handleChange={this.handleFormChange} 
           value={this.state.merenKulkijoidenViesti} aihe="merenKulkijoidenViesti" otsikko= "Merenkulkijoiden viesti" />
         </div>
         <div>
-          <Form onSubmit={this.saveForm} handleChange={this.handleFormChange} 
+          <Form handleChange={this.handleFormChange} 
           value={this.state.mePanViesti} aihe="mepanViesti" otsikko= "Mepan viesti" />
         </div>
       </div>

@@ -20,10 +20,10 @@ class Clicker extends Component {
 
     return (
       <div className="wrapper">
-        {label} 
-        <button className="button" onClick={this.DecreaseItem}>-</button>
+        <h3>{label}</h3> 
+        <button className="button" onClick={this.DecreaseItem}> - </button>
         {this.state.clicks}
-        <button className="button" onClick={this.IncrementItem}>+</button>
+        <button className="button" onClick={this.IncrementItem}> + </button>
       </div>
     )
   }
