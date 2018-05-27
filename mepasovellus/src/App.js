@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css'
-import Checkbox from './components/Checkbox'
 import DropdownValikko from './components/DropdownValikko'
 import Slideri from './components/Slideri'
 import Clicker from './components/Clicker'
 import Form from './components/Form'
+import CheckboxiLista from './components/CheckboxiLista';
 
 class App extends Component {
   constructor(props) {
@@ -22,6 +22,8 @@ class App extends Component {
         'Päivi',
         'Sampsa',
         'Tuomas'
+      ],
+      valitutKavijat: [
       ],
       satamat: [
         '1. Helsinki, FIHEL, Etelä',
@@ -69,19 +71,19 @@ class App extends Component {
         '3. Airisto',
         '4. Alppila',
         '5. Amiraali',
-'6. Amorella',
-'7. Annika Benita',
-'8. Antonia',
-'9. Aranda',
-'10. Arkadia',
-'11. Artemis',
-'12. Aura',
-'13. Auto Baltic',
-'14. Auto Bay',
-'15. Baltic Amelie',
-'16. Baltic Madonna',
-'17. Baltic Princess',
-'18. Baltica',
+        '6. Amorella',
+        '7. Annika Benita',
+        '8. Antonia',
+        '9. Aranda',
+        '10. Arkadia',
+        '11. Artemis',
+        '12. Aura',
+        '13. Auto Baltic',
+        '14. Auto Bay',
+        '15. Baltic Amelie',
+        '16. Baltic Madonna',
+        '17. Baltic Princess',
+        '18. Baltica',
 '19. Birka Stockholm',
 '20. Boann',
 '21. Bore Bank',
@@ -97,9 +99,9 @@ class App extends Component {
 '31. Eira',
 '32. Emilie',
 '33. Espa',
-'34.Estraden',
+'34. Estraden',
 '35. Exporter',
-'36.Fennica',
+'36. Fennica',
 '37. Finlandia',
 '38. Finnbreeze',
 '39. Finncarrier',
@@ -211,7 +213,7 @@ class App extends Component {
 '145. Wasa Express',
 '146. Zeus of Finland',
 '147. Muu kotimainen laiva',
-'148.Muu ulkomainen laiva',
+'148. Muu ulkomainen laiva'
       ],
       muuLaiva: '',
       valittuLaiva: '',
@@ -237,43 +239,6 @@ class App extends Component {
       satamaLimiter: ''
     }
   }
-
-  componentWillMount = () => {
-    this.selectedCheckboxes = new Set()
-  }
-
-  toggleCheckbox = (label) => {
-    if (this.selectedCheckboxes.has(label)) {
-      this.selectedCheckboxes.delete(label)
-    } else {
-      this.selectedCheckboxes.add(label)
-    }
-  }
-
-  luoCheckboxi = (label) => (
-    <Checkbox
-      label={label}
-      handleCheckboxChange={this.toggleCheckbox}
-      key={label}
-    />
-  )
-
-  luoCheckboxiLista = (lista) => lista.map(m => this.luoCheckboxi(m))
-/*
-  toggleLaiva = (value) => {
-    this.setState({valittuLaiva: value})
-  }
-
-  luoLaivabuttoni = (laiva) => (
-    <div>
-    {laiva}
-    <input type="radio" value={laiva} checked={this.state.valittuLaiva === {laiva}} onChange={this.toggleLaiva} />
-    </div>
-  )
-
-  luoLaivaLista = () => this.state.laivat.map(m => this.luoLaivabuttoni(m))
-
-  */
 
   vaihdaLaiva = (e) => {
       this.setState({
@@ -364,16 +329,41 @@ class App extends Component {
     console.log("tallennus puuttuu")
   }
 
+  handleFormSubmit = formSubmitEvent => {
+    formSubmitEvent.preventDefault();
+
+    for (const checkbox of this.selectedCheckboxes) {
+      console.log(checkbox, 'is selected.');
+    }
+  }
+/*
+  toimitukset = () => {
+    if (document.getElementById('Palvelut').selectedCheckboxes.has('Laivakäynti')){
+      return <CheckboxiLista otsikko= "Toimitukset" lista={this.state.toimitukset} />
+    } else return null
+
+  }
+  */
+
+//          <CheckboxiLista otsikko= "Toimitukset" lista={this.state.toimitukset} />
+
   render() {
 
     return (
       <div>
         <div>
-          <DropdownValikko otsikko= "Kävijat" listaaja= {this.luoCheckboxiLista(this.state.kavijat)} />
+          <form onSubmit={this.handleFormSubmit}>
+            <CheckboxiLista otsikko= "Kävijät" lista={this.state.kavijat} />
+            <button className="btn btn-default" type="submit">Save</button>
+          </form>
+          <div>
           <DropdownValikko otsikko= "Satamat" listaaja= {this.luoSatamaLista()} rajoittaja= {this.satamaRajoittaja()} />
+          </div>
+          <div>
           <DropdownValikko otsikko= "Laivat" listaaja= {this.luoLaivaLista()} rajoittaja= {this.laivaRajoittaja()} />
-          <DropdownValikko otsikko= "Palvelut" listaaja= {this.luoCheckboxiLista(this.state.palvelut)} />
-          <DropdownValikko otsikko= "Toimitukset" listaaja= {this.luoCheckboxiLista(this.state.toimitukset)} />
+          </div>
+          <CheckboxiLista otsikko="Palvelut" lista={this.state.palvelut} />
+
           <Slideri />
         </div>
         <div>

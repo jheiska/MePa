@@ -7,6 +7,7 @@ h1 {
 .dropbtn {
     background-color: #3498DB;
     color: white;
+    min-width: 500px;
     padding: 16px;
     font-size: 16px;
     border: none;
@@ -27,7 +28,7 @@ h1 {
     position: absolute;
     background-color: green;
     color: white;
-    min-width: 300px;
+    min-width: 500px;
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;

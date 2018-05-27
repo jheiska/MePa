@@ -1,0 +1,4 @@
+'Laivakäynti',
+        'Spotti',
+        'Kuljetus',
+        'Asiointipalvelut'

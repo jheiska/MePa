@@ -1,0 +1,8 @@
+'Videot',
+        'Kirjat tilatut',
+        'Kirjastovaihto',
+        'Info tai muu tiedottaminen',
+        'Vierailu/tutustuminen',
+        'Treeni tai työhyvinvointipalvelu',
+        'Lehdet',
+        'Vapaavahti tai muu MEPA-materiaali'        
