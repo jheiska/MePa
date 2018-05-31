@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {createStore} from 'redux'
 import './App.css'
 import DropdownValikko from './components/DropdownValikko'
 import Slideri from './components/Slideri'
@@ -6,6 +7,13 @@ import Clicker from './components/Clicker'
 import Form from './components/Form'
 import CheckboxiLista from './components/CheckboxiLista'
 import PaivanValitsija from './components/PaivanValitsija'
+import listaReducer from './reducers/listaReducer'
+
+const kavijaStore = createStore(listaReducer)
+const satamaStore = createStore(listaReducer)
+const laivaStore = createStore(listaReducer)
+const palveluStore = createStore(listaReducer)
+const toimitusStore = createStore(listaReducer)
 
 class App extends Component {
   constructor(props) {
@@ -234,7 +242,7 @@ class App extends Component {
         'Lehdet',
         'Vapaavahti tai muu MEPA-materiaali'        
       ],
-      merenKulkijoidenViesti: '',
+      merenkulkijoidenViesti: '',
       mepanViesti: '',
       laivaLimiter: '',
       satamaLimiter: ''
@@ -402,7 +410,7 @@ class App extends Component {
         </div>
         <div>
           <Form handleChange={this.handleFormChange} 
-          value={this.state.merenKulkijoidenViesti} aihe="merenKulkijoidenViesti" otsikko= "Merenkulkijoiden viesti" />
+          value={this.state.merenkulkijoidenViesti} aihe="merenkulkijoidenViesti" otsikko= "Merenkulkijoiden viesti" />
         </div>
         <div>
           <Form handleChange={this.handleFormChange} 
