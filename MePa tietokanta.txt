@@ -1,0 +1,32 @@
+Kirjautumisen salasananhallinta
+
+Laiva:
+
+Lippu
+Kansalaisuudet
+foreign key: raportti_id
+
+Raportti:
+
+P‰iv‰m‰‰r‰
+K‰vij‰t
+Satama
+Laiva
+Palvelut
+Toimitukset
+Kesto
+Henkilˆiden m‰‰r‰
+Keskustelujen m‰‰r‰
+Kuljetettujen m‰‰r‰
+Merenkulkijoiden viesti
+Mepan viesti
+
+Hakuja:
+Laivan X kansalaisuudet
+Milloin laivalla X on viimeksi ollut Toimitus Y
+Milloin laivalla X on k‰yty. N‰ytet‰‰n miss‰ satamassa k‰ynti ja kuka k‰vi.
+Kaikkien k‰yntien kokonaiskesto kalenterivuoden aikana, k‰yntien m‰‰r‰ ja keskiarvo.
+
+
+PostgreSQL
+
