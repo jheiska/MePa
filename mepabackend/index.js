@@ -3,7 +3,7 @@ const app = express()
 const cors = require('cors')
 //const miniRouter = require('./controllers/miniKaynnit')
 const Sequelize = require('sequelize')
-
+// const miniModel = require('./models/miniKaynti')
 const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
 
 sequelize
@@ -15,7 +15,9 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-  const MiniKaynti = sequelize.define('minikaynti', {
+
+  const MiniKaynti = sequelize.define('minikaynti',
+  {
     kavija: {
       type: Sequelize.TEXT
     },
@@ -26,6 +28,7 @@ sequelize
         type: Sequelize.TEXT
     }
   })
+
 
 const formatMiniKaynti = (minikaynti) => {
     return {
@@ -75,10 +78,11 @@ const Laiva = sequelize.define('laiva', {
 
   app.get('/createLaiva', (request, response) => {
     Laiva.create({
-            nimi: 'Laiva1',
-            lippu: 'merirosvo',
+            nimi: 'Laiva2',
+            lippu: 'rosvo',
             kansalaisuudet: 'maailman'
         })
+        .then(response.json('Laiva lisätty!'))
     })
 
 
