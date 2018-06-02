@@ -1,8 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+
 //const miniRouter = require('./controllers/miniKaynnit')
 const Sequelize = require('sequelize')
+// var miniKaynti  = require('./models/miniKaynti').default;
+// var laiva = require('./models/laiva').default
 // const miniModel = require('./models/miniKaynti')
 const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
 
@@ -74,15 +77,16 @@ const Laiva = sequelize.define('laiva', {
       .then(laivat => {
           response.json(laivat.map(formatLaiva))
       })
-  })
+    })
 
   app.get('/createLaiva', (request, response) => {
-    Laiva.create({
-            nimi: 'Laiva2',
-            lippu: 'rosvo',
-            kansalaisuudet: 'maailman'
-        })
-        .then(response.json('Laiva lisätty!'))
+    Laiva
+      .create({
+        nimi: 'Laiva3',
+        lippu: 'rosvo',
+        kansalaisuudet: 'maailman'
+      })
+      .then(response.json('Laiva lisätty!'))
     })
 
 
@@ -96,29 +100,11 @@ TESTIFINDEJA:
 */
 
 app.use(cors())
-//app.use('/api/minikaynnit', miniRouter())
 
-/*
-let laivat = [
-    {id: 1,
-    nimi: 'Laiva1',
-    lippu: 'Suomi'},
-    {id: 2,
-    nimi: 'Laiva2',
-    lippu:'Ruotsi'},
-    {id: 3,
-    nimi: 'Laiva3',
-    lippu:'Viro'}
-]
-*/
 app.get('/', (req, res) => {
     res.send('<h1>MePa-sovellus!</h1>')
 })
- /* 
-app.get('/laivat', (req, res) => {
-    res.json(laivat)
-})
-*/
+
 const PORT = 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
