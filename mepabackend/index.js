@@ -106,7 +106,6 @@ var Kaynti = sequelize.define('kaynti', {
 
 })
 
-
 const fromatKaynti = (kaynti) => {
   return {
     kavija: kaynti.kavija,
@@ -145,13 +144,7 @@ app.delete('/kaynnit/:id', (request, response) => {
 
 app.post('/kaynnit', (request, response) => {
   const body = request.body
-  console.log(body)
 
-  /*
-  if (body.content === undefined) {
-    response.status(400).json({error: 'content missing'})
-  }
-*/
   Kaynti.create({
     kavija: body.kavija,
     satama: body.satama,
@@ -165,12 +158,9 @@ app.post('/kaynnit', (request, response) => {
     merenkulkijoiden_viesti: body.merenkulkijoiden_viesti,
     mepan_viesti: body.mepan_viesti 
   })
- 
   .then(console.log('lisatty'))
-
 })
  
-
 app.get('/', (req, res) => {
     res.send('<h1>MePa-sovellus!</h1>')
 })
