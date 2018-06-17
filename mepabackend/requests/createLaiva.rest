@@ -1,0 +1,8 @@
+POST http://localhost:3001/laivat
+content-type: application/json
+
+{
+        "nimi": "Postilaiva",
+        "lippu": "flag",
+        "kansalaisuudet": "kansalainen"
+}

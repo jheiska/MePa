@@ -1,0 +1,18 @@
+Statessa:
+tehty listaReducer
+
+pysyviä: 	kavijat
+		satamat
+		laivat
+		palvelut
+		toimitukset
+
+muuttuvia valitut:	kavijat
+			satamat
+			laivat
+			palvelut
+			toimitukset
+			
+			merenkulkijoidenViesti
+			mepanViesti
+

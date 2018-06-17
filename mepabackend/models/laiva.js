@@ -1,6 +1,9 @@
-'use strict'
+"using strict"
+
 module.exports = (sequelize, DataTypes) => {
-    var laiva = sequelize.define('miniKaynti', {
+    sequelize = props.sequelize
+  
+      const Laiva = sequelize.define('laiva', {
         nimi: {
             type: Sequelize.TEXT
         },
@@ -10,9 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         kansalaisuudet: {
             type: Sequelize.TEXT
         }
-      });
+      })
   
-  
-  
-    return laiva;
+    return Laiva;
   };

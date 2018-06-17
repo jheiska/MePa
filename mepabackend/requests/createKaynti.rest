@@ -1,0 +1,16 @@
+POST http://localhost:3001/kaynnit
+Content-Type: application/json
+
+{
+    "kavija": "kavija66",
+    "satama": "satama3",
+    "laiva": "laiva3",
+    "palvelut": "palvelu2",
+    "toimitukset": "toimitus2",
+    "kesto": 15,
+    "henkiloiden_maara": 5,
+    "keskustelujen_maara": 5,
+    "kuljetettujen_maara": 2,
+    "merenkulkijoiden_viesti": "viesti",
+    "mepan_viesti": "mepaviesti" 
+}

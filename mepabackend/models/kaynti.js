@@ -1,7 +1,7 @@
-const Sequelize = require('sequelize')
 
-/*
-const Kaynti = sequelize.define('kaynti', {
+module.exports = (sequelize, DataTypes) => {
+    sequelize = props.sequelize
+    var Kaynti = sequelize.define('kaynti', {
     kavija: {
       type: Sequelize.TEXT
     },
@@ -35,27 +35,7 @@ const Kaynti = sequelize.define('kaynti', {
     mepan_viesti: {
         type: Sequelize.TEXT
     }
-
-  })
-
-*/
-
-  /*
-  Kaynti.create({
-    kavija: 'kavija2',
-    satama: 'satama2',
-    laiva: 'laiva2',
-    palvelut: 'palvelu2',
-    toimitukset: 'toimitus2',
-    kesto: 15,
-    henkiloiden_maara: 5,
-    keskustelujen_maara: 5,
-    kuljetettujen_maara: 2,
-    merenkulkijoiden_viesti: 'viesti',
-    mepan_viesti: 'mepaviesti' 
-  }).then(()=> {console.log('lisatty')
- })
-
- */
-
- module.exports = Kaynti
+    
+    })
+    return Kaynti   
+    } 

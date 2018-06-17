@@ -1,13 +1,24 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const bodyParser = require('body-parser')
+
+
+//const laivatRouter = require('./controllers/laivat' )
+//const kaynnitRouter = require('./controllers/kaynnit')(sequelize)
+
+const Sequelize = require('sequelize')
+const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
+
 
 //const miniRouter = require('./controllers/miniKaynnit')
-const Sequelize = require('sequelize')
-// var miniKaynti  = require('./models/miniKaynti').default;
-// var laiva = require('./models/laiva').default
-// const miniModel = require('./models/miniKaynti')
-const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
+
+
+app.use(bodyParser.json());
+app.use(cors())
+//app.use('/api/laivat', laivatRouter)
+//app.use('/api/kaynnit', kaynnitRouter)
+
 
 sequelize
   .authenticate()
@@ -17,38 +28,6 @@ sequelize
   .catch(err => {
     console.error('Unable to connect to the database:', err);
   });
-
-
-  const MiniKaynti = sequelize.define('minikaynti',
-  {
-    kavija: {
-      type: Sequelize.TEXT
-    },
-    satama: {
-      type: Sequelize.TEXT
-    },
-    laiva: {
-        type: Sequelize.TEXT
-    }
-  })
-
-
-const formatMiniKaynti = (minikaynti) => {
-    return {
-      id: minikaynti.id,
-      kavija: minikaynti.kavija,
-      satama: minikaynti.satama,
-      laiva: minikaynti.laiva  
-    }
-}
-
-app.get('/mini', (request, response) => {
-    MiniKaynti
-      .findAll()
-      .then(miniKaynnit => {
-          response.json(miniKaynnit.map(formatMiniKaynti))
-      })
-})
 
 const Laiva = sequelize.define('laiva', {
     nimi: {
@@ -62,16 +41,7 @@ const Laiva = sequelize.define('laiva', {
     }
   })
 
-  const formatLaiva = (laiva) => {
-      return {
-          id: laiva.id,
-          nimi: laiva.nimi,
-          lippu: laiva.lippu,
-          kansalaisuudet: laiva.kansalaisuudet
-      }
-  }
-
-  app.get('/laivat', (request, response) => {
+app.get('/laivat', (request, response) => {
     Laiva
       .findAll()
       .then(laivat => {
@@ -79,12 +49,13 @@ const Laiva = sequelize.define('laiva', {
       })
     })
 
-  app.get('/createLaiva', (request, response) => {
+  app.post('/laivat', (request, response) => {
+    const laiva = request.body
     Laiva
       .create({
-        nimi: 'Laiva3',
-        lippu: 'rosvo',
-        kansalaisuudet: 'maailman'
+          "nimi": laiva.nimi,
+          "lippu": laiva.lippu,
+          "kansalaisuudet": laiva.kansalaisuudet
       })
       .then(response.json('Laiva lisätty!'))
     })
@@ -93,13 +64,112 @@ const Laiva = sequelize.define('laiva', {
 
   /*
 TESTIFINDEJA:
-
-  MiniKaynti.findAll().then(kaynnit => {console.log(kaynnit)})
-
-  Kaynti.findOne({ where: { kavija: 'kavija1' }}).then(kaynnit => {console.log(kaynnit)})
 */
 
-app.use(cors())
+
+
+
+var Kaynti = sequelize.define('kaynti', {
+  kavija: {
+    type: Sequelize.TEXT
+  },
+  satama: {
+    type: Sequelize.TEXT
+  },
+  laiva: {
+      type: Sequelize.TEXT
+  },
+  palvelut: {
+      type: Sequelize.TEXT
+  },
+  toimitukset: {
+      type: Sequelize.TEXT
+  },
+  kesto: {
+      type: Sequelize.INTEGER
+  },
+  henkiloiden_maara: {
+      type: Sequelize.INTEGER
+  },
+  keskustelujen_maara: {
+      type: Sequelize.INTEGER
+  },
+  kuljetettujen_maara: {
+      type: Sequelize.INTEGER
+  },
+  merenkulkijoiden_viesti: {
+      type: Sequelize.TEXT
+  },
+  mepan_viesti: {
+      type: Sequelize.TEXT
+  }
+
+})
+
+
+const fromatKaynti = (kaynti) => {
+  return {
+    kavija: kaynti.kavija,
+    satama: kaynti.satama,
+    laiva: kaynti.laiva,
+    palvelut: kaynti.palvelut,
+    toimitukset: kaynti.palvelut,
+    kesto: kaynti.kesto,
+    henkiloiden_maara: kaynti.henkiloiden_maara,
+    keskustelujen_maara: kaynti.keskustelujen_maara,
+    kuljetettujen_maara: kaynti.kuljetettujen_maara,
+    merenkulkijoiden_viesti: kaynti.merenkulkijoiden_viesti,
+    mepan_viesti: kaynti.mepan_viesti
+  }
+}
+
+app.get('/kaynnit', (request, response) => {
+  Kaynti
+  .findAll()
+  .then(kaynnit => {
+    response.json(kaynnit.map(fromatKaynti))
+  })  
+})
+
+app.get('/kaynnit/:id', (request, response) => {
+  Kaynti
+  .findOne({ where: {id: request.params.id }})
+  .then(kaynti => response.json(fromatKaynti(kaynti)))
+})
+
+app.delete('/kaynnit/:id', (request, response) => {
+  Kaynti
+  .destroy({ where: { id: request.params.id }})
+  .then(response.json("Succesfully deleted"))
+})
+
+app.post('/kaynnit', (request, response) => {
+  const body = request.body
+  console.log(body)
+
+  /*
+  if (body.content === undefined) {
+    response.status(400).json({error: 'content missing'})
+  }
+*/
+  Kaynti.create({
+    kavija: body.kavija,
+    satama: body.satama,
+    laiva: body.laiva,
+    palvelut: body.palvelut,
+    toimitukset: body.toimitukset,
+    kesto: body.kesto,
+    henkiloiden_maara: body.henkiloiden_maara,
+    keskustelujen_maara: body.keskustelujen_maara,
+    kuljetettujen_maara: body.kuljetettujen_maara,
+    merenkulkijoiden_viesti: body.merenkulkijoiden_viesti,
+    mepan_viesti: body.mepan_viesti 
+  })
+ 
+  .then(console.log('lisatty'))
+
+})
+ 
 
 app.get('/', (req, res) => {
     res.send('<h1>MePa-sovellus!</h1>')

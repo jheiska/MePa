@@ -4,22 +4,38 @@ Laiva:
 
 Lippu
 Kansalaisuudet
+
 foreign key: raportti_id
+
 
 Raportti:
 
-Päivämäärä
-Kävijät
-Satama
-Laiva
-Palvelut
-Toimitukset
-Kesto
-Henkilöiden määrä
-Keskustelujen määrä
-Kuljetettujen määrä
-Merenkulkijoiden viesti
-Mepan viesti
+Päivämäärä		date
+
+Kävijät			text
+
+Satama			text
+
+Laiva			text
+
+Palvelut		text
+
+Toimitukset		text
+
+Kesto			integer
+
+Henkilöiden määrä	integer
+
+Keskustelujen määrä	integer
+
+Kuljetettujen määrä	integer
+
+Merenkulkijoiden viesti text
+
+Mepan viesti		text	
+
+
+
 
 Hakuja:
 Laivan X kansalaisuudet
