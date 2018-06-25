@@ -2,23 +2,31 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
-
-
-//const laivatRouter = require('./controllers/laivat' )
-//const kaynnitRouter = require('./controllers/kaynnit')(sequelize)
-
 const Sequelize = require('sequelize')
 const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
-
-
-//const miniRouter = require('./controllers/miniKaynnit')
-
+const satamat = require('./resources/satamat')
+//const laivatRouter = require('./controllers/laivat' )
+//const kaynnitRouter = require('./controllers/kaynnit')
 
 app.use(bodyParser.json());
 app.use(cors())
 //app.use('/api/laivat', laivatRouter)
 //app.use('/api/kaynnit', kaynnitRouter)
 
+
+app.get('/satamat', (request, response) => {
+  const satamat = this.satamat
+  .then(satamat => {
+    response.json(satamat.map(formatSatama)) 
+  })
+})
+
+const formatSatama = (satama) => {
+  return {
+    id: satama.id,
+    nimi: satama.nimi
+  }
+}
 
 sequelize
   .authenticate()
@@ -29,44 +37,14 @@ sequelize
     console.error('Unable to connect to the database:', err);
   });
 
-const Laiva = sequelize.define('laiva', {
-    nimi: {
-        type: Sequelize.TEXT
-    },
-    lippu: {
-        type: Sequelize.TEXT
-    },
-    kansalaisuudet: {
-        type: Sequelize.TEXT
-    }
-  })
-
-app.get('/laivat', (request, response) => {
-    Laiva
-      .findAll()
-      .then(laivat => {
-          response.json(laivat.map(formatLaiva))
-      })
-    })
-
-  app.post('/laivat', (request, response) => {
-    const laiva = request.body
-    Laiva
-      .create({
-          "nimi": laiva.nimi,
-          "lippu": laiva.lippu,
-          "kansalaisuudet": laiva.kansalaisuudet
-      })
-      .then(response.json('Laiva lisätty!'))
-    })
-
-
-
-  /*
-TESTIFINDEJA:
-*/
-
-
+var Laiva = sequelize.define('laiva', {
+  kaupunki: {
+    type: Sequelize.TEXT
+  },
+  nimi: {
+    type: Sequelize.TEXT
+  }
+})
 
 
 var Kaynti = sequelize.define('kaynti', {
@@ -106,7 +84,7 @@ var Kaynti = sequelize.define('kaynti', {
 
 })
 
-const fromatKaynti = (kaynti) => {
+const formatKaynti = (kaynti) => {
   return {
     kavija: kaynti.kavija,
     satama: kaynti.satama,
@@ -126,14 +104,14 @@ app.get('/kaynnit', (request, response) => {
   Kaynti
   .findAll()
   .then(kaynnit => {
-    response.json(kaynnit.map(fromatKaynti))
+    response.json(kaynnit.map(formatKaynti))
   })  
 })
 
 app.get('/kaynnit/:id', (request, response) => {
   Kaynti
   .findOne({ where: {id: request.params.id }})
-  .then(kaynti => response.json(fromatKaynti(kaynti)))
+  .then(kaynti => response.json(formatKaynti(kaynti)))
 })
 
 app.delete('/kaynnit/:id', (request, response) => {
@@ -162,7 +140,7 @@ app.post('/kaynnit', (request, response) => {
 })
  
 app.get('/', (req, res) => {
-    res.send('<h1>MePa-sovellus!</h1>')
+    res.send('MePa-sovellus!')
 })
 
 const PORT = 3001

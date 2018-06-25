@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DropdownValikko = ({otsikko, listaaja, rajoittaja}) => {
+const DropdownValikko = ({otsikko, listaaja, rajoittaja, valittu}) => {
     
     const toggleri = () => document.getElementById(otsikko).classList.toggle("show")
 
@@ -11,6 +11,7 @@ const DropdownValikko = ({otsikko, listaaja, rajoittaja}) => {
               {rajoittaja}
               {listaaja} 
             </div>
+            <div>Valittu: {valittu}</div>
     </div>
     )
 }

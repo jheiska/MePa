@@ -17,6 +17,17 @@ const Laiva = require('../models/laiva')
       response.json(laivat.map(fromatLaiva))
     })  
   })
+
+  laivaRouter.post('/laivat', (request, response) => {
+    const laiva = request.body
+    Laiva
+      .create({
+          "nimi": laiva.nimi,
+          "lippu": laiva.lippu,
+          "kansalaisuudet": laiva.kansalaisuudet
+      })
+      .then(response.json('Laiva lisätty!'))
+    })
   
   
 

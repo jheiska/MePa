@@ -1,10 +1,9 @@
+import React from 'react'
 import 'rc-slider/assets/index.css'
 import 'rc-tooltip/assets/bootstrap.css'
-import React from 'react'
 import Tooltip from 'rc-tooltip' 
 import Slider from 'rc-slider'
 
-//const createSliderWithTooltip = Slider.createSliderWithTooltip 
 const Handle = Slider.Handle 
 
 const handle = (props) => {
@@ -24,12 +23,11 @@ const handle = (props) => {
 
 const wrapperStyle = { width: 400, margin: 40 } 
 
-const Slideri = () => {
+const Slideri = ({ onChange, defaultValue }) => {
   return (
   <div>
     <div style={wrapperStyle}>
-      <Slider min={0} max={300} defaultValue={15} step={5} handle={handle} />
-      <p>{handle.value}</p>
+      <Slider min={0} max={300} defaultValue={defaultValue} step={5} handle={handle} onChange={onChange}/>
     </div>
   </div>
   )
