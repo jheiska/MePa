@@ -1,19 +1,10 @@
-"using strict"
+const Laiva = (sequelize, DataTypes) => {
 
-module.exports = (sequelize, DataTypes) => {
-    sequelize = props.sequelize
-  
-      const Laiva = sequelize.define('laiva', {
-        nimi: {
-            type: Sequelize.TEXT
-        },
-        lippu: {
-            type: Sequelize.TEXT
-        },
-        kansalaisuudet: {
-            type: Sequelize.TEXT
-        }
-      })
-  
-    return Laiva;
-  };
+    return sequelize.define('laiva',{ 
+        nimi: DataTypes.TEXT,
+        lippu: DataTypes.TEXT,
+        kansalaisuudet: DataTypes.ARRAY(DataTypes.TEXT)
+    }
+    )}
+
+module.exports = Laiva

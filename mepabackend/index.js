@@ -1,18 +1,19 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
-const Sequelize = require('sequelize')
-const sequelize = new Sequelize('postgres://jaakk:jaakko@localhost:5432/mepaTest')
 const satamat = require('./resources/satamat')
+//const loginRouter = require('./controllers/login')
+const db = require('./models/db')
 //const laivatRouter = require('./controllers/laivat' )
-//const kaynnitRouter = require('./controllers/kaynnit')
+kaynnitRouter = require('./controllers/kaynnit')
 
 app.use(bodyParser.json());
 app.use(cors())
 //app.use('/api/laivat', laivatRouter)
-//app.use('/api/kaynnit', kaynnitRouter)
-
+app.use('/api/kaynnit', kaynnitRouter)
+//app.use('/api/login', loginRouter)
 
 app.get('/satamat', (request, response) => {
   const satamat = this.satamat
@@ -26,68 +27,26 @@ const formatSatama = (satama) => {
     id: satama.id,
     nimi: satama.nimi
   }
-}
+} 
 
-sequelize
-  .authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
-
-var Laiva = sequelize.define('laiva', {
-  kaupunki: {
-    type: Sequelize.TEXT
-  },
-  nimi: {
-    type: Sequelize.TEXT
-  }
+ 
+app.get('/', (req, res) => {
+    res.send('MePa-sovellus!')
 })
 
+db.connectDB()
 
-var Kaynti = sequelize.define('kaynti', {
-  kavija: {
-    type: Sequelize.TEXT
-  },
-  satama: {
-    type: Sequelize.TEXT
-  },
-  laiva: {
-      type: Sequelize.TEXT
-  },
-  palvelut: {
-      type: Sequelize.TEXT
-  },
-  toimitukset: {
-      type: Sequelize.TEXT
-  },
-  kesto: {
-      type: Sequelize.INTEGER
-  },
-  henkiloiden_maara: {
-      type: Sequelize.INTEGER
-  },
-  keskustelujen_maara: {
-      type: Sequelize.INTEGER
-  },
-  kuljetettujen_maara: {
-      type: Sequelize.INTEGER
-  },
-  merenkulkijoiden_viesti: {
-      type: Sequelize.TEXT
-  },
-  mepan_viesti: {
-      type: Sequelize.TEXT
-  }
 
+const PORT = 3001
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
 
+/*
 const formatKaynti = (kaynti) => {
   return {
     kavija: kaynti.kavija,
-    satama: kaynti.satama,
+    satama: [kaynti.satama],
     laiva: kaynti.laiva,
     palvelut: kaynti.palvelut,
     toimitukset: kaynti.palvelut,
@@ -99,51 +58,4 @@ const formatKaynti = (kaynti) => {
     mepan_viesti: kaynti.mepan_viesti
   }
 }
-
-app.get('/kaynnit', (request, response) => {
-  Kaynti
-  .findAll()
-  .then(kaynnit => {
-    response.json(kaynnit.map(formatKaynti))
-  })  
-})
-
-app.get('/kaynnit/:id', (request, response) => {
-  Kaynti
-  .findOne({ where: {id: request.params.id }})
-  .then(kaynti => response.json(formatKaynti(kaynti)))
-})
-
-app.delete('/kaynnit/:id', (request, response) => {
-  Kaynti
-  .destroy({ where: { id: request.params.id }})
-  .then(response.json("Succesfully deleted"))
-})
-
-app.post('/kaynnit', (request, response) => {
-  const body = request.body
-
-  Kaynti.create({
-    kavija: body.kavija,
-    satama: body.satama,
-    laiva: body.laiva,
-    palvelut: body.palvelut,
-    toimitukset: body.toimitukset,
-    kesto: body.kesto,
-    henkiloiden_maara: body.henkiloiden_maara,
-    keskustelujen_maara: body.keskustelujen_maara,
-    kuljetettujen_maara: body.kuljetettujen_maara,
-    merenkulkijoiden_viesti: body.merenkulkijoiden_viesti,
-    mepan_viesti: body.mepan_viesti 
-  })
-  .then(console.log('lisatty'))
-})
- 
-app.get('/', (req, res) => {
-    res.send('MePa-sovellus!')
-})
-
-const PORT = 3001
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
-})
+*/

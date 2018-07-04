@@ -11,6 +11,7 @@ import satamaService from './services/satamat'
 import DatePicker from 'react-datepicker'
 import moment from 'moment'
 import NumericInput from 'react-numeric-input';
+import loginService from './services/login'
 
 // import {createStore} from 'redux'
 // import listaReducer from './reducers/listaReducer'
@@ -27,6 +28,9 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      username: '',
+      password: '',
+      user: null,
       startDate: moment(),
       kavijat: [
         {nimi: 'Ella', satama: 'Helsinki, FIHEL, Etelä'},
@@ -277,6 +281,34 @@ class App extends React.Component {
   }
 */
 
+login = async (event) => {
+  event.preventDefault()
+  console.log('login in with', this.state.username, this.state.password)
+  try{
+    const user = await loginService.login({
+      username: this.state.username,
+      password: this.state.password
+    })
+
+    this.setState({ username: '', password: '', user})
+  } catch(exception) {
+    this.setState({
+      error: 'käyttäjätunnus tai salasana virheellinen',
+    })
+    setTimeout(() => {
+      this.setState({ error: null })
+    }, 5000)
+  }
+}
+
+handlePasswordChange = (event) => {
+  this.setState({ password: event.target.value })
+}
+
+handleUsernameChange = (event) => {
+  this.setState({ username: event.target.value })
+}
+
 ValitsePaiva = (date) => {
   this.setState({
     startDate: date
@@ -471,7 +503,7 @@ valitseKavija = (e) => {
   }
 
   handleTietojenLahetys = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const kaynti = {
       kavija: this.state.kavijat.toString,
       satama: this.state.valittuSatama,
@@ -500,12 +532,45 @@ valitseKavija = (e) => {
   }
 
   
+loginForm = () => {
+ return (
+   <div>
+  <h2>Kirjaudu</h2>
+
+  <form onSubmit={this.login}>
+<div>
+käyttäjätunnus
+<input
+type="text"
+name="username"
+value={this.state.username}
+onChange={this.handleFormChange}
+/>
+</div>
+<div>
+salasana
+<input
+type="password"
+name="password"
+value={this.state.password}
+onChange={this.handleFormChange}
+/>
+</div>
+<button type="submit">kirjaudu</button>
+</form>
+</div>
+ )
+}
 
   render() {
 
     return (
       <div>
         <div>
+
+          {this.state.user === null && this.loginForm()}
+
+
           <h1>Mepan laivapalvelut</h1>
           <div>
           <p>Lähetä lomakkeen kautta tiedot laivakäynneistäsi.</p>
@@ -513,6 +578,9 @@ valitseKavija = (e) => {
           <p>Laivakäyntiraporttien avulla voimme helpommin seurata palvelujemme kattavuutta sekä ohjata toimintaamme laivoille, 
             jotka eivät ole hetkeen saaneet MEPA-palveluita. Yhtenäisten raportointikäyntäntöjen kautta saamme koottua yhteen tiedot mm. siitä, 
             milloin kussakin aluksessa on viimeksi käyty.</p>
+
+
+
           <h2>Päivämäärä</h2>
           </div>
           <div>
