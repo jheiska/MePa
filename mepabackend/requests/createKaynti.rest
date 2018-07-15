@@ -2,7 +2,7 @@ POST http://localhost:3001/api/kaynnit
 Content-Type: application/json
 
 {
-    "kavija": "asynckavija!!!",
+    "kavija": "asynckavija???",
     "satama": "satama3",
     "laiva": "laiva3",
     "palvelut": ["palvelu2","palvelu4"],

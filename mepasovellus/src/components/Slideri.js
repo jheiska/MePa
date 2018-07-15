@@ -1,13 +1,13 @@
-import React from 'react'
-import 'rc-slider/assets/index.css'
-import 'rc-tooltip/assets/bootstrap.css'
-import Tooltip from 'rc-tooltip' 
-import Slider from 'rc-slider'
+import React from "react"
+import "rc-slider/assets/index.css"
+import "rc-tooltip/assets/bootstrap.css"
+import Tooltip from "rc-tooltip"
+import Slider from "rc-slider"
 
-const Handle = Slider.Handle 
+const Handle = Slider.Handle
 
-const handle = (props) => {
-  const { value, dragging, index, ...restProps } = props 
+const handle = props => {
+  const { value, dragging, index, ...restProps } = props
   return (
     <Tooltip
       prefixCls="rc-slider-tooltip"
@@ -19,17 +19,24 @@ const handle = (props) => {
       <Handle value={value} {...restProps} />
     </Tooltip>
   )
-} 
+}
 
-const wrapperStyle = { width: 400, margin: 40 } 
+const wrapperStyle = { width: 400, margin: 40 }
 
 const Slideri = ({ onChange, defaultValue }) => {
   return (
-  <div>
-    <div style={wrapperStyle}>
-      <Slider min={0} max={300} defaultValue={defaultValue} step={5} handle={handle} onChange={onChange}/>
+    <div>
+      <div style={wrapperStyle}>
+        <Slider
+          min={0}
+          max={300}
+          defaultValue={defaultValue}
+          step={5}
+          handle={handle}
+          onChange={onChange}
+        />
+      </div>
     </div>
-  </div>
   )
 }
 

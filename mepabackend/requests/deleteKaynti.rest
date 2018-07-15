@@ -1,1 +1,1 @@
-DELETE http://localhost:3001/api/kaynnit/27
+DELETE http://localhost:3001/api/kaynnit/9

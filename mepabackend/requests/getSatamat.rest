@@ -1,1 +1,1 @@
-GET http://localhost:3001/satamat
+GET http://localhost:3001/api/satamat

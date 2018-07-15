@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/kaynnit/26
+GET http://localhost:3001/api/kaynnit/

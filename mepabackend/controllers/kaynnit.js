@@ -1,56 +1,83 @@
-const kayntiRouter = require("express").Router();
-const { Kaynti } = require("../models/db");
+const kayntiRouter = require("express").Router()
+const { Kaynti } = require("../models/db")
 
 kayntiRouter.get("/", async (request, response) => {
-  const kaynnit = await Kaynti.findAll();
-  response.json(kaynnit);
-});
+  const kaynnit = await Kaynti.findAll()
+  response.json(kaynnit.map(kaynti => formatKaynti(kaynti)))
+})
 
 kayntiRouter.get("/:id", async (request, response) => {
-  const kaynnit = await Kaynti.findById(request.params.id);
-  response.json(kaynnit);
-});
+  const kaynti = await Kaynti.findById(request.params.id)
+  response.json(formatKaynti(kaynti))
+})
 
-//   .findOne({ where: {id: request.params.id }})
-// .destroy({ where: { id: request.params.id }})
+// Tämmösiä vois tehä eri parametreilla jos on tarvetta:
+//    .findOne({ where: {id: request.params.id }})
+//    .destroy({ where: { id: request.params.id }})
 
 kayntiRouter.delete("/:id", async (request, response) => {
-  const kaynti = await Kaynti.findById(request.params.id);
-  kaynti.destroy();
-});
+  const kaynti = await Kaynti.findById(request.params.id).catch(error => {
+    console.log(error)
+    return response.status(500).json({ error: "Poistettavaa käyntiä ei löydy" })
+  })
+
+  await kaynti
+    .destroy()
+    .then(response.status(200).json("Käynti poistettu"))
+    .catch(error => {
+      console.log(error)
+      return response.status(500).json({ error: "Poisto epäonnistuii" })
+    })
+})
 
 kayntiRouter.post("/", async (request, response) => {
-  const body = request.body;
+  const body = request.body
   if (body === undefined) {
-    return response.status(400).json({ error: "content missing" });
+    return response.status(400).json({ error: "content missing" })
   }
 
-  const kaynti = buildKaynti(body);
+  const kaynti = buildKaynti(body)
 
   await kaynti
     .save()
-    .then(anotherTask => {
-      return response.status(200).json(anotherTask);
+    .then(uusiKaynti => {
+      return response.status(200).json(formatKaynti(uusiKaynti))
     })
     .catch(error => {
-      console.log(error);
-      response.status(500).json({ error: "something went wrong..." });
-    });
-});
+      console.log(error)
+      response.status(500).json({ error: "something went wrong..." })
+    })
+})
 
-const buildKaynti = body =>
+const buildKaynti = kaynti =>
   Kaynti.build({
-    kavija: body.kavija,
-    satama: body.satama,
-    laiva: body.laiva,
-    palvelut: [body.palvelut],
-    toimitukset: [body.toimitukset],
-    kesto: body.kesto,
-    henkiloiden_maara: body.henkiloiden_maara,
-    keskustelujen_maara: body.keskustelujen_maara,
-    kuljetettujen_maara: body.kuljetettujen_maara,
-    merenkulkijoiden_viesti: body.merenkulkijoiden_viesti,
-    mepan_viesti: body.mepan_viesti
-  });
+    kavija: kaynti.kavija,
+    satama: kaynti.satama,
+    laiva: kaynti.laiva,
+    palvelut: [kaynti.palvelut],
+    toimitukset: [kaynti.toimitukset],
+    kesto: kaynti.kesto,
+    henkiloiden_maara: kaynti.henkiloiden_maara,
+    keskustelujen_maara: kaynti.keskustelujen_maara,
+    kuljetettujen_maara: kaynti.kuljetettujen_maara,
+    merenkulkijoiden_viesti: kaynti.merenkulkijoiden_viesti,
+    mepan_viesti: kaynti.mepan_viesti
+  })
 
-module.exports = kayntiRouter;
+const formatKaynti = kaynti => {
+  return {
+    kavija: kaynti.kavija,
+    satama: kaynti.satama,
+    laiva: kaynti.laiva,
+    palvelut: kaynti.palvelut,
+    toimitukset: kaynti.palvelut,
+    kesto: kaynti.kesto,
+    henkiloiden_maara: kaynti.henkiloiden_maara,
+    keskustelujen_maara: kaynti.keskustelujen_maara,
+    kuljetettujen_maara: kaynti.kuljetettujen_maara,
+    merenkulkijoiden_viesti: kaynti.merenkulkijoiden_viesti,
+    mepan_viesti: kaynti.mepan_viesti
+  }
+}
+
+module.exports = kayntiRouter

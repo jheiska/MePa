@@ -1,8 +1,9 @@
 import axios from "axios"
-const baseUrl = "api/kaynnit"
+const baseUrl = "/api/users"
 
 const getAll = () => {
-  return axios.get(baseUrl)
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
 }
 
 const create = newObject => {
@@ -13,4 +14,4 @@ const update = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
 }
 
-export default { getAll, create, update }
+export default { getAll }

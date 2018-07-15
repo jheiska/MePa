@@ -1,8 +1,8 @@
-POST http://localhost:3001/laivat
+POST http://localhost:3001/api/laivat
 content-type: application/json
 
 {
-        "nimi": "Postilaiva",
-        "lippu": "flag",
-        "kansalaisuudet": "kansalainen"
+        "nimi": "Alexander B",
+        "lippu": "Antigua ja Barbuda, AG",
+        "kansalaisuudet": ["Venäjä", "Ukraina", "Filippiinit", "Kap Verde"]
 }
