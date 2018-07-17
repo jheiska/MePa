@@ -2,7 +2,7 @@ POST http://localhost:3001/api/laivat
 content-type: application/json
 
 {
-        "nimi": "Alexander B",
-        "lippu": "Antigua ja Barbuda, AG",
-        "kansalaisuudet": ["Venäjä", "Ukraina", "Filippiinit", "Kap Verde"]
+        "nimi": "Muu ulkomainen laiva",
+        "lippu": "",
+        "kansalaisuudet": []
 }

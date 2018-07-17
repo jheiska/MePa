@@ -4,6 +4,10 @@ h1 {
   text-align: center;
 }
 
+body {
+  background-color: cyan;
+}
+
 .dropbtn {
   background-color: #3498db;
   color: white;

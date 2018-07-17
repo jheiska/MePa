@@ -95,10 +95,7 @@ class App extends React.Component {
         password: "",
         user,
         valittuSatama: user.oletussatama,
-        valitutKavijat: this.state.valitutKavijat.concat({
-          nimi: user.nimi,
-          oletussatama: user.oletussatama
-        })
+        valitutKavijat: this.state.valitutKavijat.concat(user.nimi)
       })
       this.setState({ valittuSatama: user.oletussatama })
     } catch (exception) {

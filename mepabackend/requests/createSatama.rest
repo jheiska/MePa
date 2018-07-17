@@ -1,7 +1,7 @@
 POST http://localhost:3001/api/satamat
 content-type: application/json
 
-{
-    "kaupunki": "kaupunki3",
-    "koodi": "KOODI2"
-}
+  { 
+                 "kaupunki": "Muu ulkomainen satama",
+                "koodi": ""
+                 }

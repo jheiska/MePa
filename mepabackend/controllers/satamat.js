@@ -8,7 +8,7 @@ satamatRouter.get("/", async (request, response) => {
 
 satamatRouter.get("/:id", async (request, response) => {
   const satama = await Satama.findById(request.params.id)
-  response.json(satama)
+  response.json(formatSatama(satama))
 })
 
 satamatRouter.delete("/:id", async (request, response) => {

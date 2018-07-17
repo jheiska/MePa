@@ -2,8 +2,8 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "martina@mepa",
-    "nimi": "Martina",
-    "oletussatama": "Helsinki, FIHEL, Etelä",
-    "password": "passu"
+    "username": "ella.mustamo@mepa.fi",
+    "nimi": "Ella",
+    "password": "1234",
+    "oletussatama": 5
 }

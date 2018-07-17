@@ -1,38 +1,146 @@
 [
-	    { "kaupunki": "Helsinki", "nimi": "FIHEL, Etel‰"},
-        { "kaupunki": "Helsinki", "nimi": "FIHEL, Hernesaari ja L‰nsi"},
-        { "kaupunki": "Helsinki", "nimi": "FIHEL, Vuosaari"},
-        { "kaupunki": "Eurajoki", "nimi": "FIEJO"},
-        { "kaupunki": "Hanko", "nimi": " FIHKO"},
-        { "kaupunki": "Hamina", "nimi": "FIKTK"},
-        { "kaupunki": "Inkoo", "nimi": "FIINK"},
-        { "kaupunki": "Kalajoki", "nimi": "FIKJO"},
-        { "kaupunki": "Kantvik", "nimi": "FIKNT"},
-        { "kaupunki": "Kaskinen" "nimi": "FIKAS"},
-        { "kaupunki":  "Kemi", "nimi": " FIKEM"},
-        { "kaupunki": "Kilpilahti", "nimi": " FISKV"},
-        { "kaupunki": "Kristiinankaupunki", "nimi": " FIKRS"},
-        { "kaupunki":  "Kokkola", "nimi": " FIKOK"},
-        { "kaupunki":  "Kotka", "nimi": " FIKTK"},
-        { "kaupunki":  "Koverhar", "nimi": " FIKVH"},
-        { "kaupunki": "Lentokentt‰", "nimi": " Helsinki-Vantaa"},
-        { "kaupunki": "Loviisa", "nimi": " FILOV"},
-        { "kaupunki": "Mariehamn", "nimi": " FIMHQ"},
-        { "kaupunki":  "Naantali", "nimi": " FINLI"},
-        { "kaupunki":  "Oulu",  "nimi": "FIOUL"},
-        { "kaupunki":  "Parainen", "nimi": " FIPAR"},
-        { "kaupunki":  "Pori", "nimi": " FIPOR"},
-        { "kaupunki":  "Posti", "nimi": ""},
-        { "kaupunki":  "Raahe", "nimi": " FIRAA"},
-        { "kaupunki":  "Rauma", "nimi": " FIRAU"},
-        { "kaupunki":  "Turku", "nimi": " FITKU"},
-        { "kaupunki":  "Turku", "nimi": " korjaustelakka"},
-        { "kaupunki":  "Tolkkinen",  "nimi": "FITOK"},
-        { "kaupunki":  "Tornio", "nimi": " FITOR"},
-        { "kaupunki":  "Uusikaupunki", "nimi": "FIUKI"},
-        { "kaupunki":  "Vaasa", "nimi": "FIVAA"},
-        { "kaupunki":  "Muu Ahvenanmaa", "nimi": ""},
-        { "kaupunki":  "Muu Saimaa", "nimi": ""},
-        { "kaupunki":  "Muu Satama", "nimi": ""},
-        { "kaupunki":  "Muu ulkomainen satama", "nimi": ""}
+        {
+                "kaupunki": "Helsinki",
+                "nimi": "FIHEL, Etel√§"
+        },
+        {
+                "kaupunki": "Helsinki",
+                "nimi": "FIHEL, Hernesaari ja L√§nsi"
+        },
+        {
+                "kaupunki": "Helsinki",
+                "nimi": "FIHEL, Vuosaari"
+        },
+        {
+                "kaupunki": "Eurajoki",
+                "nimi": "FIEJO"
+        },
+        {
+                "kaupunki": "Hanko",
+                "nimi": " FIHKO"
+        },
+        {
+                "kaupunki": "Hamina",
+                "nimi": "FIKTK"
+        },
+        {
+                "kaupunki": "Inkoo",
+                "nimi": "FIINK"
+        },
+        {
+                "kaupunki": "Kalajoki",
+                "nimi": "FIKJO"
+        },
+        {
+                "kaupunki": "Kantvik",
+                "nimi": "FIKNT"
+        },
+        {
+                "kaupunki": "Kaskinen",
+                "nimi": "FIKAS"
+        },
+        {
+                "kaupunki": "Kemi",
+                "nimi": " FIKEM"
+        },
+        {
+                "kaupunki": "Kilpilahti",
+                "nimi": " FISKV"
+        },
+        {
+                "kaupunki": "Kristiinankaupunki",
+                "nimi": " FIKRS"
+        },
+        {
+                "kaupunki": "Kokkola",
+                "nimi": " FIKOK"
+        },
+        {
+                "kaupunki": "Kotka",
+                "nimi": " FIKTK"
+        },
+        {
+                "kaupunki": "Koverhar",
+                "nimi": " FIKVH"
+        },
+        {
+                "kaupunki": "Lentokentt√§",
+                "nimi": " Helsinki-Vantaa"
+        },
+        {
+                "kaupunki": "Loviisa",
+                "nimi": " FILOV"
+        },
+        {
+                "kaupunki": "Mariehamn",
+                "nimi": " FIMHQ"
+        },
+        {
+                "kaupunki": "Naantali",
+                "nimi": " FINLI"
+        },
+        {
+                "kaupunki": "Oulu",
+                "nimi": "FIOUL"
+        },
+        {
+                "kaupunki": "Parainen",
+                "nimi": " FIPAR"
+        },
+        {
+                "kaupunki": "Pori",
+                "nimi": " FIPOR"
+        },
+        {
+                "kaupunki": "Posti",
+                "nimi": ""
+        },
+        {
+                "kaupunki": "Raahe",
+                "nimi": " FIRAA"
+        },
+        {
+                "kaupunki": "Rauma",
+                "nimi": " FIRAU"
+        },
+        {
+                "kaupunki": "Turku",
+                "nimi": " FITKU"
+        },
+        {
+                "kaupunki": "Turku",
+                "nimi": " korjaustelakka"
+        },
+        {
+                "kaupunki": "Tolkkinen",
+                "nimi": "FITOK"
+        },
+        {
+                "kaupunki": "Tornio",
+                "nimi": " FITOR"
+        },
+        {
+                "kaupunki": "Uusikaupunki",
+                "nimi": "FIUKI"
+        },
+        {
+                "kaupunki": "Vaasa",
+                "nimi": "FIVAA"
+        },
+        {
+                "kaupunki": "Muu Ahvenanmaa",
+                "nimi": ""
+        },
+        {
+                "kaupunki": "Muu Saimaa",
+                "nimi": ""
+        },
+        {
+                "kaupunki": "Muu kotimainen satama",
+                "nimi": ""
+        },
+        {
+                "kaupunki": "Muu ulkomainen satama",
+                "nimi": ""
+        }
 ]
