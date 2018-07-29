@@ -3,6 +3,6 @@ content-type: application/json
 
 {
         "nimi": "Muu ulkomainen laiva",
-        "lippu": "",
-        "kansalaisuudet": []
+        "lippu": "lippu",
+        "kansalaisuus": [valtio: "Suomi", valtio: "Viro"]
 }

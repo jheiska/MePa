@@ -6,6 +6,7 @@ const Kaynti = sequelize.import("./kaynti")
 const Laiva = sequelize.import("./laiva")
 const User = sequelize.import("./user")
 const Satama = sequelize.import("./satama")
+const Kansalaisuus = sequelize.import("./kansalaisuus")
 
 const connectDB = () => {
   sequelize
@@ -16,7 +17,29 @@ const connectDB = () => {
     .catch(err => {
       console.error("Unable to connect to the database:", err)
     })
+
+  Kaynti.belongsTo(Laiva)
+  Laiva.hasMany(Kaynti)
+
+  Laiva.belongsToMany(Kansalaisuus, {
+    through: "LaivaKansalaisuus"
+  })
+  Kansalaisuus.belongsToMany(Laiva, {
+    through: "LaivaKansalaisuus"
+  })
+  /*
+  User.belongsTo(Satama)
+  Satama.hasMany(User)
+*/
   sequelize.sync()
 }
 
-module.exports = { sequelize, connectDB, Laiva, Kaynti, Satama, User }
+module.exports = {
+  sequelize,
+  connectDB,
+  Laiva,
+  Kaynti,
+  Satama,
+  User,
+  Kansalaisuus
+}

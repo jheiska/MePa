@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import kavijaService from "../services/kavijat"
-import DropdownValikko from "../components/DropdownValikko"
+import kansalaisuusService from "../services/kansalaisuudet"
 
 class LisaaKavija extends Component {
   constructor(props) {
@@ -9,8 +9,15 @@ class LisaaKavija extends Component {
       username: "",
       password: "",
       nimi: "",
-      oletussatama: ""
+      oletussatama: "",
+      kansala: ""
     }
+  }
+
+  componentDidMount() {
+    kansalaisuusService.getAll().then(kansalaisuudet => {
+      this.setState({ kansalaisuudet })
+    })
   }
 
   handleFormChange = event => {
@@ -53,17 +60,18 @@ class LisaaKavija extends Component {
           Sähköposti (toimii käyttäjätunnuksena)
           <input
             type="username"
-            name="email"
+            name="username"
             value={this.state.username}
             onChange={this.handleFormChange}
           />
-          Oletussatama
+          Salasana
           <input
             type="password"
             name="password"
             value={this.state.password}
             onChange={this.handleFormChange}
           />
+          Oletussatama
           <input
             type="text"
             name="oletussatama"
@@ -78,12 +86,3 @@ class LisaaKavija extends Component {
 }
 
 export default LisaaKavija
-
-/*
-{
-    "username": "martina@mepa",
-    "nimi": "Martina",
-    "oletussatama": "Helsinki, FIHEL, Etelä",
-    "password": "passu"
-}
-*/

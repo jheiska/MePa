@@ -1,14 +1,15 @@
 const laivatRouter = require("express").Router()
-const { Laiva } = require("../models/db")
+const { Laiva, Kansalaisuus } = require("../models/db")
 
 laivatRouter.get("/", async (request, response) => {
-  const laivat = await Laiva.findAll()
+  const laivat = await Laiva.findAll({ include: [{ model: Kansalaisuus }] })
   response.json(laivat.map(laiva => formatLaiva(laiva)))
+  //  response.json(laivat.map(laiva => formatLaiva(laiva)))
 })
 
 laivatRouter.get("/:id", async (request, response) => {
   const laiva = await Laiva.findById(request.params.id)
-  response.json(kaynti)
+  response.json(formatLaiva(laiva))
 })
 
 laivatRouter.delete("/:id", async (request, response) => {
@@ -40,14 +41,32 @@ const buildLaiva = laiva =>
   Laiva.build({
     nimi: laiva.nimi,
     lippu: laiva.lippu,
-    kansalaisuudet: laiva.kansalaisuudet.map(l => l)
+    kansalaisuudet: laiva.kansalaisuudet
   })
+
+laivatRouter.put("/:id", async (request, response) => {
+  const laiva = await Laiva.findById(request.params.id)
+  const kansalaisuusId = request.body.kansalaisuus
+  const kansalaisuus = await Kansalaisuus.findById(kansalaisuusId)
+
+  await laiva.addKansalaisuus(kansalaisuus)
+  response.json("Kansalaisuus lisätty laivaan")
+  /*
+  const updatedLaiva = await Laiva.update(
+    { kansalaisuudet: request.body.kansalaisuudet },
+    { returning: true, where: { id: request.params.laivaId } }
+  )
+  
+  response.json(formatLaiva(updatedLaiva))
+  */
+})
 
 const formatLaiva = laiva => {
   return {
+    id: laiva.id,
     nimi: laiva.nimi,
     lippu: laiva.lippu,
-    kansalaisuudet: laiva.kansalaisuudet
+    kansalaisuudet: laiva.kansalaisuus
   }
 }
 

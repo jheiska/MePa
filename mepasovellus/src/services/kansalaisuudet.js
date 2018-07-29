@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "/api/users"
+const baseUrl = "/api/kansalaisuudet"
 
 const getAll = () => {
   const request = axios.get(baseUrl)
@@ -14,4 +14,4 @@ const update = (id, newObject) => {
   return axios.put(`${baseUrl}/${id}`, newObject)
 }
 
-export default { getAll, create }
+export default { getAll }

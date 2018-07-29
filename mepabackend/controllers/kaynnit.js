@@ -1,8 +1,8 @@
 const kayntiRouter = require("express").Router()
-const { Kaynti } = require("../models/db")
+const { Kaynti, Laiva } = require("../models/db")
 
 kayntiRouter.get("/", async (request, response) => {
-  const kaynnit = await Kaynti.findAll()
+  const kaynnit = await Kaynti.findAll({ include: [{ model: Laiva }] })
   response.json(kaynnit.map(kaynti => formatKaynti(kaynti)))
 })
 
@@ -16,18 +16,14 @@ kayntiRouter.get("/:id", async (request, response) => {
 //    .destroy({ where: { id: request.params.id }})
 
 kayntiRouter.delete("/:id", async (request, response) => {
-  const kaynti = await Kaynti.findById(request.params.id).catch(error => {
-    console.log(error)
-    return response.status(500).json({ error: "Poistettavaa käyntiä ei löydy" })
-  })
+  try {
+    const kaynti = await Kaynti.findById(request.params.id)
 
-  await kaynti
-    .destroy()
-    .then(response.status(200).json("Käynti poistettu"))
-    .catch(error => {
-      console.log(error)
-      return response.status(500).json({ error: "Poisto epäonnistuii" })
-    })
+    await kaynti.destroy()
+    response.status(200).json("Käynti poistettu")
+  } catch (error) {
+    return response.status(500).json({ error: "Poisto epäonnistuii" })
+  }
 })
 
 kayntiRouter.post("/", async (request, response) => {
@@ -35,27 +31,24 @@ kayntiRouter.post("/", async (request, response) => {
   if (body === undefined) {
     return response.status(400).json({ error: "content missing" })
   }
-
   const kaynti = buildKaynti(body)
-
-  await kaynti
-    .save()
-    .then(uusiKaynti => {
-      return response.status(200).json(formatKaynti(uusiKaynti))
-    })
-    .catch(error => {
-      console.log(error)
-      response.status(500).json({ error: "something went wrong..." })
-    })
+  try {
+    const uusiKaynti = await kaynti.save()
+    response.status(200).json(JSON.parse(uusiKaynti))
+  } catch (error) {
+    response.status(500).json({ error: "something went wrong..." })
+  }
 })
 
 const buildKaynti = kaynti =>
   Kaynti.build({
-    kavija: kaynti.kavija,
+    pvm: kaynti.pvm,
+    kayttaja: kaynti.kayttaja,
+    kavijat: kaynti.kavijat,
     satama: kaynti.satama,
-    laiva: kaynti.laiva,
-    palvelut: [kaynti.palvelut],
-    toimitukset: [kaynti.toimitukset],
+    laivaId: kaynti.laivaId,
+    palvelut: kaynti.palvelut,
+    toimitukset: kaynti.toimitukset,
     kesto: kaynti.kesto,
     henkiloiden_maara: kaynti.henkiloiden_maara,
     keskustelujen_maara: kaynti.keskustelujen_maara,
@@ -66,9 +59,11 @@ const buildKaynti = kaynti =>
 
 const formatKaynti = kaynti => {
   return {
-    kavija: kaynti.kavija,
+    pvm: kaynti.pvm,
+    kayttaja: kaynti.kayttaja,
+    kavijat: kaynti.kavijat,
     satama: kaynti.satama,
-    laiva: kaynti.laiva,
+    laiva: [kaynti.laiva.nimi, kaynti.laiva.lippu, kaynti.laiva.kansallisuudet],
     palvelut: kaynti.palvelut,
     toimitukset: kaynti.palvelut,
     kesto: kaynti.kesto,

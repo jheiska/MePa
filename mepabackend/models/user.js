@@ -4,6 +4,15 @@ const User = (sequelize, DataTypes) => {
     nimi: DataTypes.STRING,
     passwordHash: DataTypes.STRING,
     oletussatama: DataTypes.STRING
+    /*
+    oletussatama: {
+      type: DataTypes.STRING,
+      references: {
+        model: "satama",
+        key: "koodi"
+      }
+    }
+    */
   })
 }
 

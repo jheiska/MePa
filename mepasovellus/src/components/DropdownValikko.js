@@ -34,7 +34,7 @@ class DropdownValikko extends React.Component {
   }
 
   render() {
-    const { otsikko, rajoittaja, listaaja, valittu } = this.props
+    const { otsikko, rajoittaja, listaaja } = this.props
     return (
       <div
         className="dropdown"
@@ -49,7 +49,6 @@ class DropdownValikko extends React.Component {
             {listaaja}
           </div>
         )}
-        <div className="dropdown-content">Valittuna: {valittu}</div>
       </div>
     )
   }

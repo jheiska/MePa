@@ -14,6 +14,7 @@ usersRouter.get("/:id", async (request, response) => {
 
 const formatUser = user => {
   return {
+    username: user.username,
     nimi: user.nimi,
     oletussatama: user.oletussatama
   }

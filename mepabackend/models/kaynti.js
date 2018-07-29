@@ -1,8 +1,9 @@
 const Kaynti = (sequelize, DataTypes) => {
   return sequelize.define("kaynti", {
+    pvm: DataTypes.DATEONLY,
+    kayttaja: DataTypes.TEXT,
     kavijat: DataTypes.ARRAY(DataTypes.TEXT),
     satama: DataTypes.TEXT,
-    laiva: DataTypes.TEXT,
     palvelut: DataTypes.ARRAY(DataTypes.TEXT),
     toimitukset: DataTypes.ARRAY(DataTypes.TEXT),
     kesto: DataTypes.INTEGER,

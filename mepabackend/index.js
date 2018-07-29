@@ -9,6 +9,7 @@ const laivatRouter = require("./controllers/laivat")
 const kaynnitRouter = require("./controllers/kaynnit")
 const usersRouter = require("./controllers/users")
 const loginRouter = require("./controllers/login")
+const kansalaisuudetRouter = require("./controllers/kansalaisuudet")
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -17,6 +18,7 @@ app.use("/api/kaynnit", kaynnitRouter)
 app.use("/api/users", usersRouter)
 app.use("/api/login", loginRouter)
 app.use("/api/satamat", satamatRouter)
+app.use("/api/kansalaisuudet", kansalaisuudetRouter)
 
 app.get("/", (req, res) => {
   res.send("MePa-sovellus!")

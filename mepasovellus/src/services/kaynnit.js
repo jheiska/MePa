@@ -1,8 +1,9 @@
 import axios from "axios"
-const baseUrl = "api/kaynnit"
+const baseUrl = "/api/kaynnit"
 
 const getAll = () => {
-  return axios.get(baseUrl)
+  const request = axios.get(baseUrl)
+  return request.then(response => response.data)
 }
 
 const create = newObject => {
