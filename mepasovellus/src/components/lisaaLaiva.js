@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import laivaService from "../services/laivat"
+import kansalaisuusService from "../services/kansalaisuudet"
 
 class LisaaLaiva extends Component {
   constructor(props) {
@@ -11,6 +12,10 @@ class LisaaLaiva extends Component {
       kansalaisuudet: []
     }
   }
+
+  //  TÄSTÄ PUUTTUU KANSALAISUUKSIEN LINKITTÄMINEN LAIVAAN!!!
+  //  TÄYTYY FIKSATA ENNENKUIN VOI LAITTAA TUOTANTOON
+  //
 
   handleFormChange = event => {
     this.setState({ [event.target.name]: event.target.value })

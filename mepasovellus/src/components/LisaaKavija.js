@@ -1,6 +1,5 @@
 import React, { Component } from "react"
 import kavijaService from "../services/kavijat"
-import kansalaisuusService from "../services/kansalaisuudet"
 
 class LisaaKavija extends Component {
   constructor(props) {
@@ -9,15 +8,8 @@ class LisaaKavija extends Component {
       username: "",
       password: "",
       nimi: "",
-      oletussatama: "",
-      kansala: ""
+      oletussatama: ""
     }
-  }
-
-  componentDidMount() {
-    kansalaisuusService.getAll().then(kansalaisuudet => {
-      this.setState({ kansalaisuudet })
-    })
   }
 
   handleFormChange = event => {

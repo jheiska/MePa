@@ -1,4 +1,4 @@
-PUT http://localhost:3001/api/laivat/13
+PUT http://localhost:3001/api/laivat/16
 Content-Type: application/json
 
 {

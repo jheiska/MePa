@@ -11,6 +11,7 @@ const usersRouter = require("./controllers/users")
 const loginRouter = require("./controllers/login")
 const kansalaisuudetRouter = require("./controllers/kansalaisuudet")
 
+app.use(express.static("build"))
 app.use(bodyParser.json())
 app.use(cors())
 app.use("/api/laivat", laivatRouter)
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
 
 db.connectDB()
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })

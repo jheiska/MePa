@@ -2,7 +2,8 @@ const laivatRouter = require("express").Router()
 const { Laiva, Kansalaisuus } = require("../models/db")
 
 laivatRouter.get("/", async (request, response) => {
-  const laivat = await Laiva.findAll({ include: [{ model: Kansalaisuus }] })
+  // const laivat = await Laiva.findAll({ include: [{ model: Kansalaisuus }] })
+  const laivat = await Laiva.findAll()
   response.json(laivat.map(laiva => formatLaiva(laiva)))
   //  response.json(laivat.map(laiva => formatLaiva(laiva)))
 })
@@ -66,7 +67,8 @@ const formatLaiva = laiva => {
     id: laiva.id,
     nimi: laiva.nimi,
     lippu: laiva.lippu,
-    kansalaisuudet: laiva.kansalaisuus
+    kansalaisuudet: ""
+    //    kansalaisuudet: laiva.kansalaisuus
   }
 }
 

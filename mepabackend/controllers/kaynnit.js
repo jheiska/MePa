@@ -1,5 +1,6 @@
 const kayntiRouter = require("express").Router()
 const { Kaynti, Laiva } = require("../models/db")
+const jwt = require("jsonwebtoken")
 
 kayntiRouter.get("/", async (request, response) => {
   const kaynnit = await Kaynti.findAll({ include: [{ model: Laiva }] })
@@ -26,17 +27,37 @@ kayntiRouter.delete("/:id", async (request, response) => {
   }
 })
 
+const getTokenFrom = request => {
+  const authorization = request.get("authorization")
+  if (authorization && authorization.toLowerCase().startsWith("bearer ")) {
+    return authorization.substring(7)
+  }
+  return null
+}
+
 kayntiRouter.post("/", async (request, response) => {
   const body = request.body
-  if (body === undefined) {
-    return response.status(400).json({ error: "content missing" })
-  }
-  const kaynti = buildKaynti(body)
   try {
-    const uusiKaynti = await kaynti.save()
-    response.status(200).json(JSON.parse(uusiKaynti))
-  } catch (error) {
-    response.status(500).json({ error: "something went wrong..." })
+    //   const token = getTokenFrom(request)
+    //   const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    //   if (!token || !decodedToken.id) {
+    //     return response.status(401).json({ error: "token missing or invalid" })
+    //   }
+
+    if (body === undefined) {
+      return response.status(400).json({ error: "content missing" })
+    }
+    const kaynti = buildKaynti(body)
+
+    await kaynti.save()
+    response.json(body)
+  } catch (exception) {
+    if (exception.name === "JsonWebTokenError") {
+      response.status(401).json({ error: "tämä error?" })
+    } else {
+      response.status(500).json({ error: "something went wrong..." })
+    }
   }
 })
 
@@ -63,7 +84,7 @@ const formatKaynti = kaynti => {
     kayttaja: kaynti.kayttaja,
     kavijat: kaynti.kavijat,
     satama: kaynti.satama,
-    laiva: [kaynti.laiva.nimi, kaynti.laiva.lippu, kaynti.laiva.kansallisuudet],
+    laiva: [kaynti.laiva.nimi, kaynti.laiva.lippu, kaynti.laiva.kansalaisuudet],
     palvelut: kaynti.palvelut,
     toimitukset: kaynti.palvelut,
     kesto: kaynti.kesto,

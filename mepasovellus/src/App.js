@@ -13,9 +13,11 @@ import satamaService from "./services/satamat"
 import loginService from "./services/login"
 import kavijaService from "./services/kavijat"
 import laivaService from "./services/laivat"
+//import kansalaisuusService from "./services/kansalaisuudet"
 import LisaaLaiva from "./components/lisaaLaiva"
 import LisaaKavija from "./components/LisaaKavija"
 import Notification from "./components/Notification"
+import Logout from "./components/Logout"
 
 class App extends React.Component {
   constructor(props) {
@@ -30,7 +32,7 @@ class App extends React.Component {
       uusiKavija: "",
       valitutKavijat: [],
       satamat: [],
-      valittuSatama: "",
+      valittuSatama: null,
       laivat: [],
       valittuLaiva: "",
       palvelut: ["Laivakäynti", "Spotti", "Kuljetus", "Asiointipalvelut"],
@@ -54,20 +56,29 @@ class App extends React.Component {
       laivaLimiter: "",
       satamaLimiter: "",
       kesto: 15,
-      kaynnit: []
+      kaynnit: [],
+      kansalaisuudet: []
     }
   }
   // LUO SATAMAT TIETOKANTAAN!
-  componentDidMount() {
-    satamaService.getAll().then(satamat => {
-      this.setState({ satamat })
-    })
-    laivaService.getAll().then(laivat => {
-      this.setState({ laivat })
-    })
-    kayntiService.getAll().then(kaynnit => {
-      this.setState({ kaynnit })
-    })
+  componentDidMount = async () => {
+    const satamat = await satamaService.getAll()
+    this.setState({ satamat })
+    const laivat = await laivaService.getAll()
+    this.setState({ laivat })
+    const kaynnit = await kayntiService.getAll()
+    this.setState({ kaynnit })
+    const KayttajaJSON = window.localStorage.getItem("kirjautunutKayttaja")
+    if (KayttajaJSON) {
+      const user = JSON.parse(KayttajaJSON)
+      const valittuSatama = this.haeSatamaKoodilla(user.oletussatama)
+      console.log(valittuSatama)
+      this.setState({
+        user,
+        valittuSatama
+      })
+      kayntiService.setToken(user.token)
+    }
   }
 
   login = async event => {
@@ -78,29 +89,33 @@ class App extends React.Component {
         username: this.state.username,
         password: this.state.password
       })
-
+      console.log(user)
+      window.localStorage.setItem("kirjautunutKayttaja", JSON.stringify(user))
+      const satama = this.haeSatamaKoodilla(user.oletussatama)
+      kayntiService.setToken(user.token)
       this.setState({
         username: "",
         password: "",
         user,
-        valittuSatama: user.oletussatama,
-        valitutKavijat: this.state.valitutKavijat.concat(user.nimi)
+        valitutKavijat: this.state.valitutKavijat.concat(user.nimi),
+        valittuSatama: satama
       })
-      this.setState({ valittuSatama: user.oletussatama })
-      user.username.includes("mepa.fi")
-        ? kavijaService.getAll().then(kavijat => {
-            kavijat = kavijat.filter(k => k.username.includes("mepa.fi"))
-            this.setState({ kavijat })
-          })
-        : null
     } catch (exception) {
-      this.setState({
-        error: "käyttäjätunnus tai salasana virheellinen"
-      })
-      setTimeout(() => {
-        this.setState({ error: null })
-      }, 5000)
+      this.handleError("käyttäjätunnus tai salasana virheellinen")
+      this.setState({ password: "" })
     }
+  }
+
+  handleError = error => {
+    this.setState({ error })
+    setTimeout(() => {
+      this.setState({ error: null })
+    }, 5000)
+  }
+
+  handleLogout = e => {
+    this.setState({ user: null, username: "", password: "" })
+    window.localStorage.removeItem("kirjautunutKayttaja")
   }
 
   handlePasswordChange = event => {
@@ -152,10 +167,6 @@ class App extends React.Component {
   }
 
   vaihdaLaiva = event => {
-    /*
-    this.setState({
-      valittuLaiva: e.target.value
-    })*/
     const etsiLaiva = laiva => {
       return laiva.nimi === event.target.value
     }
@@ -163,10 +174,20 @@ class App extends React.Component {
     this.setState({ valittuLaiva: uusiLaiva })
   }
 
-  vaihdaSatama = e => {
-    this.setState({
-      valittuSatama: e.target.value
+  vaihdaSatama = event => {
+    const uusiSatama = this.haeSatamaKoodilla(event.target.value)
+    this.setState({ valittuSatama: uusiSatama })
+  }
+
+  haeSatamaKoodilla = haku => {
+    console.log(haku)
+    console.log(this.state.satamat)
+    const uusiSatama = this.state.satamat.find(s => {
+      console.log(s.koodi, haku)
+      return s.koodi === haku
     })
+
+    return uusiSatama
   }
 
   vaihdaKesto = event => {
@@ -182,6 +203,13 @@ class App extends React.Component {
   }
 
   luoKavijaLista = () => {
+    this.state.user.username.includes("mepa.fi")
+      ? kavijaService.getAll().then(kavijat => {
+          kavijat = kavijat.filter(k => k.username.includes("mepa.fi"))
+          this.setState({ kavijat })
+        })
+      : null
+
     return this.state.kavijat.map(
       kavija =>
         kavija.nimi !== this.state.user.nimi ? (
@@ -251,14 +279,13 @@ class App extends React.Component {
       this.state.valitutPalvelut.includes("Spotti")
     ) {
       return this.state.toimitukset.map((toimitus, index) => (
-        <div>
+        <div key={index}>
           <label>
             <input
               type="checkbox"
               className="checkbox"
               name="toimitus"
               value={toimitus}
-              key={index}
               onChange={this.valitseToimitus}
               checked={this.state.valitutToimitukset.includes(toimitus)}
             />
@@ -269,31 +296,7 @@ class App extends React.Component {
     } else return null
   }
 
-  luoLaivaLista = () => {
-    const laivatToShow =
-      this.state.laivaLimiter.length === 0
-        ? this.state.laivat
-        : this.state.laivat.filter(laiva =>
-            laiva.nimi
-              .toLowerCase()
-              .includes(this.state.laivaLimiter.toLowerCase())
-          )
-
-    return laivatToShow.map((laiva, index) => (
-      <div key={index} className="dropbtn">
-        <input
-          type="radio"
-          name="laiva"
-          value={laiva.nimi}
-          onChange={this.vaihdaLaiva}
-        />
-        {laiva.nimi}
-      </div>
-    ))
-  }
-
   laivanTiedot = () => {
-    console.log(this.state.valittuLaiva)
     if (this.state.valittuLaiva === "") {
       return null
     }
@@ -319,13 +322,37 @@ class App extends React.Component {
     )
   }
 
+  luoLaivaLista = () => {
+    const laivatToShow =
+      this.state.laivaLimiter.length === 0
+        ? this.state.laivat
+        : this.state.laivat.filter(laiva =>
+            laiva.nimi
+              .toLowerCase()
+              .includes(this.state.laivaLimiter.toLowerCase())
+          )
+
+    return laivatToShow.map((laiva, index) => (
+      <div key={index} className="dropbtn">
+        <input
+          type="radio"
+          name="laiva"
+          value={laiva.nimi}
+          onChange={this.vaihdaLaiva}
+        />
+        {laiva.nimi}
+      </div>
+    ))
+  }
+
   luoSatamaLista = () => {
     const satamatToShow =
       this.state.satamaLimiter.length === 0
         ? this.state.satamat
         : this.state.satamat.filter(satama =>
-            satama.koodi
+            satama.kaupunki
               .toLowerCase()
+              .concat(satama.koodi.toLowerCase())
               .includes(this.state.satamaLimiter.toLowerCase())
           )
 
@@ -342,9 +369,13 @@ class App extends React.Component {
     ))
   }
 
-  satamanTiedot = () => {
-    return <div>Valittu satama: {this.state.valittuSatama}</div>
-  }
+  satamanTiedot = () =>
+    this.state.valittuSatama != null ? (
+      <div>
+        Valittu satama: {this.state.valittuSatama.kaupunki},{" "}
+        {this.state.valittuSatama.koodi}
+      </div>
+    ) : null
 
   satamaRajoittaja = () => {
     return (
@@ -376,35 +407,50 @@ class App extends React.Component {
 
   tietojenLahetys = e => {
     e.preventDefault()
-    const kaynti = {
-      pvm: this.state.startDate,
-      kayttaja: this.state.user.nimi,
-      kavijat: this.state.valitutKavijat,
-      satama: this.state.valittuSatama,
-      laivaId: this.state.valittuLaiva.id,
-      palvelut: this.state.valitutPalvelut,
-      toimitukset: this.state.valitutToimitukset,
-      kesto: this.state.kesto,
-      henkiloiden_maara: this.state.henkilot,
-      keskustelujen_maara: this.state.keskustelut,
-      kuljetettujen_maara: this.state.kuljetetut,
-      merenkulkijoiden_viesti: this.state.merenkulkijoidenViesti,
-      mepan_viesti: this.state.mepanViesti
+    if (this.state.valittuLaiva === "" || this.state.valittuLaiva === null) {
+      this.handleError("Laivan valinta puuttuu!")
+    } else if (
+      this.state.valittuSatama === "" ||
+      this.state.valittuSatama === null ||
+      this.state.valittuSatama === undefined
+    ) {
+      this.handleError("Sataman valinta puuttuu!")
+    } else if (
+      this.state.valitutPalvelut.length === 0 ||
+      this.state.valitutPalvelut === null
+    ) {
+      this.handleError("Palveluiden valinta puuttuu!")
+    } else {
+      const kaynti = {
+        pvm: this.state.startDate,
+        kayttaja: this.state.user.nimi,
+        kavijat: this.state.valitutKavijat,
+        satama: this.state.valittuSatama.koodi,
+        laivaId: this.state.valittuLaiva.id,
+        palvelut: this.state.valitutPalvelut,
+        toimitukset: this.state.valitutToimitukset,
+        kesto: this.state.kesto,
+        henkiloiden_maara: this.state.henkilot,
+        keskustelujen_maara: this.state.keskustelut,
+        kuljetettujen_maara: this.state.kuljetetut,
+        merenkulkijoiden_viesti: this.state.merenkulkijoidenViesti,
+        mepan_viesti: this.state.mepanViesti
+      }
+      kayntiService.create(kaynti)
+      // käyttäjä, satama ja kävijät pysyvät samoina kuin ennen, muut nollataan.
+      this.setState({
+        valitutKavijat: [],
+        valittuLaiva: "",
+        valitutPalvelut: [],
+        valitutToimitukset: [],
+        kesto: 15,
+        henkilot: 0,
+        keskustelut: 0,
+        kuljetetut: 0,
+        merenkulkijoidenViesti: "",
+        mepanViesti: ""
+      })
     }
-    kayntiService.create(kaynti)
-    // käyttäjä, satama ja kävijät pysyvät samoina kuin ennen, muut nollataan.
-    this.setState({
-      valitutKavijat: [],
-      valittuLaiva: "",
-      valitutPalvelut: [],
-      valitutToimitukset: [],
-      kesto: 15,
-      henkilot: 0,
-      keskustelut: 0,
-      kuljetetut: 0,
-      merenkulkijoidenViesti: "",
-      mepanViesti: ""
-    })
   }
 
   kuljetetut = () => {
@@ -427,7 +473,6 @@ class App extends React.Component {
   loginForm = () => {
     return (
       <div className="intro">
-        <Notification message={this.state.error} />
         <h2>Mepa-laivakäyntisovellus</h2>
         <br />
         <br />
@@ -501,6 +546,7 @@ class App extends React.Component {
               listaaja={this.luoSatamaLista()}
               rajoittaja={this.satamaRajoittaja()}
             />
+            {/*rajoittaja={this.satamaRajoittaja()}*/}
             <div>{this.satamanTiedot()}</div>
             <DropdownValikko
               otsikko="Valitse laiva"
@@ -610,8 +656,8 @@ class App extends React.Component {
   adminForm = () => {
     return (
       <div>
-        <LisaaLaiva />
-        <LisaaKavija />
+        {/*        <LisaaLaiva kansalaisuudet={this.state.kansalaisuudet} /> */}
+        <LisaaKavija satamat={this.state.satamat} />
         <DropdownValikko
           listaaja={this.kaynnitList()}
           otsikko={"käyntilista"}
@@ -626,16 +672,23 @@ class App extends React.Component {
       sivu = this.loginForm()
     } else if (this.state.user.nimi === "admin") {
       sivu = this.adminForm()
-    } else if (this.state.user !== "admin") {
+    } else {
       sivu = this.mepaForm()
     }
-    return <div>{sivu}</div>
+    return (
+      <div>
+        <Notification message={this.state.error} />
+        {sivu}
+      </div>
+    )
   }
 
   render() {
     return (
-      //      <div>{this.state.user === null ? this.loginForm() : this.mepaForm()}</div>
-      <div>{this.forminVaihtaja()}</div>
+      <div>
+        <div>{this.forminVaihtaja()}</div>
+        <Logout outLogger={this.handleLogout} user={this.state.user} />
+      </div>
     )
   }
 }

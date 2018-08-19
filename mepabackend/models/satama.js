@@ -1,7 +1,7 @@
 const Satama = (sequelize, DataTypes) => {
   return sequelize.define("satama", {
-    kaupunki: DataTypes.TEXT,
-    koodi: DataTypes.TEXT
+    kaupunki: DataTypes.STRING,
+    koodi: DataTypes.STRING
   })
 }
 
