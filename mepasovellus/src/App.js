@@ -68,6 +68,8 @@ class App extends React.Component {
     this.setState({ laivat })
     const kaynnit = await kayntiService.getAll()
     this.setState({ kaynnit })
+    const kavijat = await kavijaService.getAll()
+    this.setState({ kavijat })
     const KayttajaJSON = window.localStorage.getItem("kirjautunutKayttaja")
     if (KayttajaJSON) {
       const user = JSON.parse(KayttajaJSON)
@@ -75,7 +77,8 @@ class App extends React.Component {
       console.log(valittuSatama)
       this.setState({
         user,
-        valittuSatama
+        valittuSatama,
+        valitutKavijat: this.state.valitutKavijat.concat(user.nimi)
       })
       kayntiService.setToken(user.token)
     }
@@ -114,7 +117,13 @@ class App extends React.Component {
   }
 
   handleLogout = e => {
-    this.setState({ user: null, username: "", password: "" })
+    this.setState({
+      user: null,
+      username: "",
+      password: "",
+      valitutKavijat: [],
+      valittuSatama: ""
+    })
     window.localStorage.removeItem("kirjautunutKayttaja")
   }
 
@@ -203,14 +212,11 @@ class App extends React.Component {
   }
 
   luoKavijaLista = () => {
-    this.state.user.username.includes("mepa.fi")
-      ? kavijaService.getAll().then(kavijat => {
-          kavijat = kavijat.filter(k => k.username.includes("mepa.fi"))
-          this.setState({ kavijat })
-        })
-      : null
+    const kavijat = this.state.user.username.includes("mepa.fi")
+      ? this.state.kavijat.filter(k => k.username.includes("mepa.fi"))
+      : this.state.kavijat
 
-    return this.state.kavijat.map(
+    return kavijat.map(
       kavija =>
         kavija.nimi !== this.state.user.nimi ? (
           <div key={kavija.nimi}>
@@ -301,12 +307,19 @@ class App extends React.Component {
       return null
     }
     return (
-      <ul>
-        <li>Valittu laiva:</li>
-        <li>Nimi: {this.state.valittuLaiva.nimi}</li>
-        <li>Lippu: {this.state.valittuLaiva.lippu}</li>
-        <li>Kansalaisuudet: {this.state.valittuLaiva.kansalaisuudet}</li>
-      </ul>
+      <div>
+        <div>Valittu laiva:</div>
+        <ul>
+          <li>Nimi: {this.state.valittuLaiva.nimi}</li>
+          <li>Lippu: {this.state.valittuLaiva.lippu}</li>
+          <li>
+            Kansalaisuudet:{" "}
+            {this.state.valittuLaiva.kansalaisuudet.map(kansalaisuus => (
+              <div>{kansalaisuus}</div>
+            ))}
+          </li>
+        </ul>
+      </div>
     )
   }
 
@@ -546,7 +559,6 @@ class App extends React.Component {
               listaaja={this.luoSatamaLista()}
               rajoittaja={this.satamaRajoittaja()}
             />
-            {/*rajoittaja={this.satamaRajoittaja()}*/}
             <div>{this.satamanTiedot()}</div>
             <DropdownValikko
               otsikko="Valitse laiva"
@@ -635,7 +647,9 @@ class App extends React.Component {
         <li>Käyttäjä: {kaynti.kayttaja}</li>
         <li>
           Kävijät:{" "}
-          {kaynti.kavijat.map(kavija => <div key={kavija}>{kavija}</div>)}
+          {kaynti.kavijat.map(kavija => (
+            <div key={kavija}>{kavija}</div>
+          ))}
         </li>
         <li>Satama: {kaynti.satama}</li>
         <li>Palvelut: {kaynti.palvelut}</li>

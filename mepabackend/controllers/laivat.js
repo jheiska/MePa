@@ -2,21 +2,33 @@ const laivatRouter = require("express").Router()
 const { Laiva, Kansalaisuus } = require("../models/db")
 
 laivatRouter.get("/", async (request, response) => {
-  // const laivat = await Laiva.findAll({ include: [{ model: Kansalaisuus }] })
-  const laivat = await Laiva.findAll()
-  response.json(laivat.map(laiva => formatLaiva(laiva)))
-  //  response.json(laivat.map(laiva => formatLaiva(laiva)))
+  try {
+    const laivat = await Laiva.findAll({ include: [{ model: Kansalaisuus }] })
+    response.json(laivat.map(laiva => formatLaiva(laiva)))
+  } catch (error) {
+    return response.status(500).json({ error: "Laivoja ei löytynyt" })
+  }
 })
 
 laivatRouter.get("/:id", async (request, response) => {
-  const laiva = await Laiva.findById(request.params.id)
-  response.json(formatLaiva(laiva))
+  try {
+    const laiva = await Laiva.findById(request.params.id, {
+      include: [{ model: Kansalaisuus }]
+    })
+    response.json(formatLaiva(laiva))
+  } catch (error) {
+    return response.status(500).json({ error: "Laivaa ei löytynyt" })
+  }
 })
 
 laivatRouter.delete("/:id", async (request, response) => {
-  const laiva = await Laiva.findById(request.params.id)
-  laiva.destroy()
-  response.json("Laiva poistettu")
+  try {
+    const laiva = await Laiva.findById(request.params.id)
+    laiva.destroy()
+    response.json("Laiva poistettu")
+  } catch (error) {
+    return response.status(500).json({ error: "Poisto epäonnistuii" })
+  }
 })
 
 laivatRouter.post("/", async (request, response) => {
@@ -26,16 +38,12 @@ laivatRouter.post("/", async (request, response) => {
   }
 
   const laiva = buildLaiva(body)
-
-  await laiva
-    .save()
-    .then(uusiLaiva => {
-      return response.status(200).json(formatLaiva(uusiLaiva))
-    })
-
-    .catch(error => {
-      response.status(500).json({ error: "something went wrong..." })
-    })
+  try {
+    await laiva.save()
+    return response.status(200).json(formatLaiva(laiva))
+  } catch (error) {
+    response.status(500).json({ error: "something went wrong..." })
+  }
 })
 
 const buildLaiva = laiva =>
@@ -46,12 +54,17 @@ const buildLaiva = laiva =>
   })
 
 laivatRouter.put("/:id", async (request, response) => {
-  const laiva = await Laiva.findById(request.params.id)
-  const kansalaisuusId = request.body.kansalaisuus
-  const kansalaisuus = await Kansalaisuus.findById(kansalaisuusId)
+  try {
+    const laiva = await Laiva.findById(request.params.id)
+    const kansalaisuusId = request.body.kansalaisuus
+    const kansalaisuus = await Kansalaisuus.findById(kansalaisuusId)
 
-  await laiva.addKansalaisuus(kansalaisuus)
-  response.json("Kansalaisuus lisätty laivaan")
+    await laiva.addKansalaisuus(kansalaisuus)
+    //await laiva.removeKansalaisuus(kansalaisuus)
+    response.json(kansalaisuus.valtio)
+  } catch (error) {
+    response.status(500).json({ error: "something went wrong..." })
+  }
   /*
   const updatedLaiva = await Laiva.update(
     { kansalaisuudet: request.body.kansalaisuudet },
@@ -63,12 +76,14 @@ laivatRouter.put("/:id", async (request, response) => {
 })
 
 const formatLaiva = laiva => {
+  const kansalaisuuslista = laiva.kansalaisuus
+    ? laiva.kansalaisuus.map(kansalaisuus => kansalaisuus.valtio)
+    : []
   return {
     id: laiva.id,
     nimi: laiva.nimi,
     lippu: laiva.lippu,
-    kansalaisuudet: ""
-    //    kansalaisuudet: laiva.kansalaisuus
+    kansalaisuudet: kansalaisuuslista
   }
 }
 

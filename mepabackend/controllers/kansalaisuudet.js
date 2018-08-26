@@ -2,19 +2,33 @@ const kansalaisuudetRouter = require("express").Router()
 const { Kansalaisuus } = require("../models/db")
 
 kansalaisuudetRouter.get("/", async (request, response) => {
-  const kansalaisuudet = await Kansalaisuus.findAll()
-  response.json(kansalaisuudet.map(s => formatkansalaisuus(s)))
+  try {
+    const kansalaisuudet = await Kansalaisuus.findAll()
+    response.json(kansalaisuudet.map(s => formatkansalaisuus(s)))
+  } catch (error) {
+    return response.status(500).json({ error: "Kansalaisuuksia ei löytynyt" })
+  }
 })
 
 kansalaisuudetRouter.get("/:id", async (request, response) => {
-  const kansalaisuus = await Kansalaisuus.findById(request.params.id)
-  response.json(formatkansalaisuus(kansalaisuus))
+  try {
+    const kansalaisuus = await Kansalaisuus.findById(request.params.id)
+    response.json(formatkansalaisuus(kansalaisuus))
+  } catch (error) {
+    return response.status(500).json({ error: "Kansalaisuutta ei löytynyt" })
+  }
 })
 
 kansalaisuudetRouter.delete("/:id", async (request, response) => {
-  const kansalaisuus = await Kansalaisuus.findById(request.params.id)
-  kansalaisuus.destroy()
-  response.json("kansalaisuus poistettu")
+  try {
+    const kansalaisuus = await Kansalaisuus.findById(request.params.id)
+    kansalaisuus.destroy()
+    response.json("kansalaisuus poistettu")
+  } catch (error) {
+    return response
+      .status(500)
+      .json({ error: "Kansalaisuuden poisto epäonnistui" })
+  }
 })
 
 kansalaisuudetRouter.post("/", async (request, response) => {

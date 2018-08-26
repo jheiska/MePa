@@ -2,5 +2,5 @@ POST http://localhost:3001/api/kansalaisuudet
 content-type: application/json
 
 {
-        "valtio": "Kuuba"
+        "valtio": "Puola"
 }

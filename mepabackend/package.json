@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "watch": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "react-scripts build"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "jsonwebtoken": "^8.3.0",
     "pg": "^7.4.3",
     "pg-hstore": "^2.3.2",
+    "react-scripts": "^1.1.5",
     "sequelize": "^4.37.10"
   },
   "devDependencies": {

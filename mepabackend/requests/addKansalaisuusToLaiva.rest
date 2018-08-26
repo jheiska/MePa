@@ -1,0 +1,6 @@
+PUT HTTP://localhost:3001/api/laivat/44
+Content-Type: application/json
+
+{
+        "kansalaisuus": 13
+}

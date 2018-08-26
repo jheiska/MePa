@@ -3,18 +3,25 @@ const { Kaynti, Laiva } = require("../models/db")
 const jwt = require("jsonwebtoken")
 
 kayntiRouter.get("/", async (request, response) => {
-  const kaynnit = await Kaynti.findAll({ include: [{ model: Laiva }] })
-  response.json(kaynnit.map(kaynti => formatKaynti(kaynti)))
+  try {
+    const kaynnit = await Kaynti.findAll({ include: [{ model: Laiva }] })
+    response.json(kaynnit.map(kaynti => formatKaynti(kaynti)))
+  } catch (error) {
+    return response.status(500).json({ error: "Käyntien haku epäonnistui" })
+  }
 })
 
 kayntiRouter.get("/:id", async (request, response) => {
-  const kaynti = await Kaynti.findById(request.params.id)
-  response.json(formatKaynti(kaynti))
+  try {
+    const kaynti = await Kaynti.findById(request.params.id)
+    response.json(formatKaynti(kaynti))
+  } catch (error) {
+    return response.status(500).json({ error: "Käynnin haku epäonnistui" })
+  }
 })
 
 // Tämmösiä vois tehä eri parametreilla jos on tarvetta:
 //    .findOne({ where: {id: request.params.id }})
-//    .destroy({ where: { id: request.params.id }})
 
 kayntiRouter.delete("/:id", async (request, response) => {
   try {
@@ -23,7 +30,7 @@ kayntiRouter.delete("/:id", async (request, response) => {
     await kaynti.destroy()
     response.status(200).json("Käynti poistettu")
   } catch (error) {
-    return response.status(500).json({ error: "Poisto epäonnistuii" })
+    return response.status(500).json({ error: "Poisto epäonnistui" })
   }
 })
 
@@ -38,12 +45,11 @@ const getTokenFrom = request => {
 kayntiRouter.post("/", async (request, response) => {
   const body = request.body
   try {
-    //   const token = getTokenFrom(request)
-    //   const decodedToken = jwt.verify(token, process.env.SECRET)
-
-    //   if (!token || !decodedToken.id) {
-    //     return response.status(401).json({ error: "token missing or invalid" })
-    //   }
+    const token = getTokenFrom(request)
+    const decodedToken = jwt.verify(token, process.env.SECRET)
+    if (!token || !decodedToken.username) {
+      return response.status(401).json({ error: "token missing or invalid" })
+    }
 
     if (body === undefined) {
       return response.status(400).json({ error: "content missing" })
@@ -54,7 +60,7 @@ kayntiRouter.post("/", async (request, response) => {
     response.json(body)
   } catch (exception) {
     if (exception.name === "JsonWebTokenError") {
-      response.status(401).json({ error: "tämä error?" })
+      response.status(401).json({ error: "invalid token" })
     } else {
       response.status(500).json({ error: "something went wrong..." })
     }

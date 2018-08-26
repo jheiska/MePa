@@ -2,9 +2,10 @@ POST http://localhost:3001/api/kaynnit
 Content-Type: application/json
 
 {
-    "kavija": "asynckavija???",
+    "kayttaja": "kayttaka",
+    "kavijat": ["asynckavija???", "async2"],
     "satama": "satama3",
-    "laiva": "laiva3",
+    "laivaId": 50,
     "palvelut": ["palvelu2","palvelu4"],
     "toimitukset": ["toimitus2", "toimitus4"],
     "kesto": 15,
