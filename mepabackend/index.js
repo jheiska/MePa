@@ -1,4 +1,7 @@
-require("dotenv").config()
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config()
+}
+
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -21,9 +24,11 @@ app.use("/api/login", loginRouter)
 app.use("/api/satamat", satamatRouter)
 app.use("/api/kansalaisuudet", kansalaisuudetRouter)
 
+/*
 app.get("/", (req, res) => {
   res.send("MePa-sovellus!")
 })
+*/
 
 db.connectDB()
 

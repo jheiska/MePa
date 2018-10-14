@@ -1,7 +1,15 @@
+//require("dotenv").config()
 const Sequelize = require("sequelize")
+
+// Lokaali tietokanta.
+/*
 const sequelize = new Sequelize(
   "postgres://jaakk:jaakko@localhost:5432/mepaTest"
 )
+*/
+
+const sequelize = new Sequelize(process.env.POSTGRES)
+
 const Kaynti = sequelize.import("./kaynti")
 const Laiva = sequelize.import("./laiva")
 const User = sequelize.import("./user")

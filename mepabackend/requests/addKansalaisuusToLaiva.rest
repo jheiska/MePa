@@ -1,6 +1,6 @@
-PUT HTTP://localhost:3001/api/laivat/44
+PUT HTTP://localhost:3001/api/laivat/50
 Content-Type: application/json
 
 {
-        "kansalaisuus": 13
+        "kansalaisuus": 8
 }
