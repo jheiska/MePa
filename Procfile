@@ -1,1 +1,1 @@
-web: node mepabackend/src/index.js
+web: index.js
