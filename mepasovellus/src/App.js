@@ -73,6 +73,7 @@ class App extends React.Component {
     const KayttajaJSON = window.localStorage.getItem("kirjautunutKayttaja")
     if (KayttajaJSON) {
       const user = JSON.parse(KayttajaJSON)
+      console.log(user)
       const valittuSatama = this.haeSatamaKoodilla(user.oletussatama)
       console.log(valittuSatama)
       this.setState({
@@ -315,7 +316,7 @@ class App extends React.Component {
           <li>
             Kansalaisuudet:{" "}
             {this.state.valittuLaiva.kansalaisuudet.map(kansalaisuus => (
-              <div>{kansalaisuus}</div>
+              <div key={kansalaisuus.id}>{kansalaisuus}</div>
             ))}
           </li>
         </ul>
