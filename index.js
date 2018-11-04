@@ -23,11 +23,11 @@ app.use("/api/users", usersRouter)
 app.use("/api/login", loginRouter)
 app.use("/api/satamat", satamatRouter)
 app.use("/api/kansalaisuudet", kansalaisuudetRouter)
-
+/*
 app.get("/", (req, res) => {
   res.send("MePa-sovellus!")
 })
-
+*/
 db.connectDB()
 
 const PORT = process.env.PORT || 3001
