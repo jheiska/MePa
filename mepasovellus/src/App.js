@@ -73,7 +73,6 @@ class App extends React.Component {
     const KayttajaJSON = window.localStorage.getItem("kirjautunutKayttaja")
     if (KayttajaJSON) {
       const user = JSON.parse(KayttajaJSON)
-      console.log(user)
       const valittuSatama = this.haeSatamaKoodilla(user.oletussatama)
       console.log(valittuSatama)
       this.setState({

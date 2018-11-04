@@ -46,3 +46,17 @@ Kaikkien käyntien kokonaiskesto kalenterivuoden aikana, käyntien määrä ja keskia
 
 PostgreSQL
 
+
+// Tämmösiä vois tehä eri parametreilla jos on tarvetta:
+//    .findOne({ where: {id: request.params.id }})
+
+laivat.js:
+/*
+  const updatedLaiva = await Laiva.update(
+    { kansalaisuudet: request.body.kansalaisuudet },
+    { returning: true, where: { id: request.params.laivaId } }
+  )
+  
+  response.json(formatLaiva(updatedLaiva))
+  */
+
