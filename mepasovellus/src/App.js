@@ -216,49 +216,62 @@ class App extends React.Component {
       ? this.state.kavijat.filter(k => k.username.includes("mepa.fi"))
       : this.state.kavijat
 
-    return kavijat.map(
-      kavija =>
-        kavija.nimi !== this.state.user.nimi ? (
-          <div key={kavija.nimi}>
-            <label>
-              <input
-                type="checkbox"
-                className="checkbox"
-                name="kavija"
-                value={kavija.nimi}
-                onChange={this.valitseKavija}
-                checked={this.state.valitutKavijat.includes(kavija.nimi)}
-              />
-              {kavija.nimi}
-            </label>
-          </div>
-        ) : null
+    return kavijat.map(kavija =>
+      kavija.nimi !== this.state.user.nimi && kavija.nimi !== "admin" ? (
+        <div key={kavija.nimi}>
+          <label>
+            <input
+              type="checkbox"
+              className="checkbox"
+              name="kavija"
+              value={kavija.nimi}
+              onChange={this.valitseKavija}
+              checked={this.state.valitutKavijat.includes(kavija.nimi)}
+            />
+            {kavija.nimi}
+          </label>
+        </div>
+      ) : null
     )
   }
 
   kavijanLisaaja = () => {
     return (
       <div>
-        <input
-          type="text"
-          name="uusiKavija"
-          value={this.state.uusiKavija}
-          onChange={this.handleFormChange}
-        />
-        <button onClick={this.lisaaKavija}>Lisää</button>
+        <div>
+          <input
+            type="text"
+            name="uusiKavija"
+            value={this.state.uusiKavija}
+            onChange={this.handleFormChange}
+          />
+          <br />
+          <br />
+        </div>
+
+        <div>
+          <button onClick={this.lisaaKavija}>Lisää</button>
+        </div>
       </div>
     )
   }
 
   lisaaKavija = event => {
     event.preventDefault()
-    const kavijat = this.state.kavijat
-    const kavija = { nimi: this.state.uusiKavija, oletussatama: "" }
+    if (this.state.uusiKavija !== "") {
+      const kavijat = this.state.kavijat
+      const kavija = {
+        id: 999999,
+        nimi: this.state.uusiKavija,
+        oletussatama: "",
+        username: "uusi@mepa.fi"
+      }
 
-    const uusikavijalista = kavijat.concat(kavija)
+      const uusikavijalista = kavijat.concat(kavija)
 
-    this.setState({ kavijat: uusikavijalista })
-    this.setState({ uusiKavija: "" })
+      this.setState({ kavijat: uusikavijalista })
+      this.setState({ uusiKavija: "" })
+    }
   }
 
   luoPalveluLista = () => {
@@ -346,14 +359,16 @@ class App extends React.Component {
           )
 
     return laivatToShow.map((laiva, index) => (
-      <div key={index} className="dropbtn">
-        <input
-          type="radio"
+      <div key={index}>
+        <button
+          className="dropbtn"
+          //         type="button"
           name="laiva"
           value={laiva.nimi}
-          onChange={this.vaihdaLaiva}
-        />
-        {laiva.nimi}
+          onClick={this.vaihdaLaiva}
+        >
+          {laiva.nimi}
+        </button>
       </div>
     ))
   }
@@ -370,14 +385,15 @@ class App extends React.Component {
           )
 
     return satamatToShow.map((satama, index) => (
-      <div key={index} className="dropbtn">
-        <input
-          type="radio"
+      <div key={index}>
+        <button
+          className="dropbtn"
           name="satama"
           value={satama.koodi}
-          onChange={this.vaihdaSatama}
-        />
-        {satama.kaupunki}, {satama.koodi}
+          onClick={this.vaihdaSatama}
+        >
+          {satama.kaupunki}, {satama.koodi}
+        </button>
       </div>
     ))
   }
@@ -450,6 +466,7 @@ class App extends React.Component {
         mepan_viesti: this.state.mepanViesti
       }
       kayntiService.create(kaynti)
+      this.handleError("Lomake lähetetty. Kiitos!")
       // käyttäjä, satama ja kävijät pysyvät samoina kuin ennen, muut nollataan.
       this.setState({
         valitutKavijat: [],
@@ -554,18 +571,18 @@ class App extends React.Component {
             <br />
           </div>
           <div>
+            <div>{this.satamanTiedot()}</div>
             <DropdownValikko
-              otsikko="Valitse satama"
+              otsikko="Vaihda satama"
               listaaja={this.luoSatamaLista()}
               rajoittaja={this.satamaRajoittaja()}
             />
-            <div>{this.satamanTiedot()}</div>
+            <div>{this.laivanTiedot()}</div>
             <DropdownValikko
               otsikko="Valitse laiva"
               listaaja={this.luoLaivaLista()}
               rajoittaja={this.laivaRajoittaja()}
             />
-            <div>{this.laivanTiedot()}</div>
           </div>
           <div>
             <br />
@@ -691,8 +708,8 @@ class App extends React.Component {
     }
     return (
       <div>
-        <Notification message={this.state.error} />
         {sivu}
+        <Notification message={this.state.error} />
       </div>
     )
   }

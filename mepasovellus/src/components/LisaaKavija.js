@@ -40,36 +40,46 @@ class LisaaKavija extends Component {
     return (
       <form onSubmit={this.lisaaKavija}>
         <div>
-          Nimi
-          <input
-            type="text"
-            name="nimi"
-            value={this.state.nimi}
-            onChange={this.handleFormChange}
-          />
-        </div>
-        <div>
-          Sähköposti (toimii käyttäjätunnuksena)
-          <input
-            type="username"
-            name="username"
-            value={this.state.username}
-            onChange={this.handleFormChange}
-          />
-          Salasana
-          <input
-            type="password"
-            name="password"
-            value={this.state.password}
-            onChange={this.handleFormChange}
-          />
-          Oletussatama
-          <input
-            type="text"
-            name="oletussatama"
-            value={this.state.oletussatama}
-            onChange={this.handleFormChange}
-          />
+          <div>
+            Nimi
+            <br />
+            <input
+              type="text"
+              name="nimi"
+              value={this.state.nimi}
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div>
+            Sähköposti (toimii käyttäjätunnuksena)
+            <br />
+            <input
+              type="username"
+              name="username"
+              value={this.state.username}
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div>
+            Salasana
+            <br />
+            <input
+              type="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleFormChange}
+            />
+          </div>
+          <div>
+            Oletussatama
+            <br />
+            <input
+              type="text"
+              name="oletussatama"
+              value={this.state.oletussatama}
+              onChange={this.handleFormChange}
+            />
+          </div>
         </div>
         <button type="submit">Lisää kävijä</button>
       </form>
