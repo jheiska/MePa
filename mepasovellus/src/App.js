@@ -16,7 +16,7 @@ import laivaService from "./services/laivat"
 //import kansalaisuusService from "./services/kansalaisuudet"
 import LisaaLaiva from "./components/lisaaLaiva"
 import LisaaKavija from "./components/LisaaKavija"
-import Notification from "./components/Notification"
+import Ilmoitus from "./components/Ilmoitus"
 import Logout from "./components/Logout"
 
 class App extends React.Component {
@@ -26,7 +26,7 @@ class App extends React.Component {
       username: "",
       password: "",
       user: null,
-      error: null,
+      viesti: { tyyppi: null, viesti: null },
       startDate: moment(),
       kavijat: [],
       uusiKavija: "",
@@ -104,15 +104,15 @@ class App extends React.Component {
         valittuSatama: satama
       })
     } catch (exception) {
-      this.handleError("käyttäjätunnus tai salasana virheellinen")
+      this.handleViesti("virhe", "käyttäjätunnus tai salasana virheellinen")
       this.setState({ password: "" })
     }
   }
 
-  handleError = error => {
-    this.setState({ error })
+  handleViesti = (tyyppi, teksti) => {
+    this.setState({ viesti: { tyyppi: tyyppi, viesti: teksti } })
     setTimeout(() => {
-      this.setState({ error: null })
+      this.setState({ viesti: { tyyppi: null, viesti: null } })
     }, 5000)
   }
 
@@ -216,22 +216,40 @@ class App extends React.Component {
       ? this.state.kavijat.filter(k => k.username.includes("mepa.fi"))
       : this.state.kavijat
 
-    return kavijat.map(kavija =>
-      kavija.nimi !== this.state.user.nimi && kavija.nimi !== "admin" ? (
-        <div key={kavija.nimi}>
+    return (
+      <div>
+        <div key={this.state.user.nimi}>
           <label>
             <input
               type="checkbox"
               className="checkbox"
               name="kavija"
-              value={kavija.nimi}
+              value={this.state.user.nimi}
               onChange={this.valitseKavija}
-              checked={this.state.valitutKavijat.includes(kavija.nimi)}
+              checked={true}
+              disabled
             />
-            {kavija.nimi}
+            {this.state.user.nimi}
           </label>
         </div>
-      ) : null
+        {kavijat.map(kavija =>
+          kavija.nimi !== this.state.user.nimi && kavija.nimi !== "admin" ? (
+            <div key={kavija.nimi}>
+              <label>
+                <input
+                  type="checkbox"
+                  className="checkbox"
+                  name="kavija"
+                  value={kavija.nimi}
+                  onChange={this.valitseKavija}
+                  checked={this.state.valitutKavijat.includes(kavija.nimi)}
+                />
+                {kavija.nimi}
+              </label>
+            </div>
+          ) : null
+        )}
+      </div>
     )
   }
 
@@ -437,18 +455,18 @@ class App extends React.Component {
   tietojenLahetys = e => {
     e.preventDefault()
     if (this.state.valittuLaiva === "" || this.state.valittuLaiva === null) {
-      this.handleError("Laivan valinta puuttuu!")
+      this.handleViesti("virhe", "Laivan valinta puuttuu!")
     } else if (
       this.state.valittuSatama === "" ||
       this.state.valittuSatama === null ||
       this.state.valittuSatama === undefined
     ) {
-      this.handleError("Sataman valinta puuttuu!")
+      this.handleViesti("virhe", "Sataman valinta puuttuu!")
     } else if (
       this.state.valitutPalvelut.length === 0 ||
       this.state.valitutPalvelut === null
     ) {
-      this.handleError("Palveluiden valinta puuttuu!")
+      this.handleViesti("virhe", "Palveluiden valinta puuttuu!")
     } else {
       const kaynti = {
         pvm: this.state.startDate,
@@ -466,7 +484,7 @@ class App extends React.Component {
         mepan_viesti: this.state.mepanViesti
       }
       kayntiService.create(kaynti)
-      this.handleError("Lomake lähetetty. Kiitos!")
+      this.handleViesti("onnistuminen", "Lomake lähetetty. Kiitos!")
       // käyttäjä, satama ja kävijät pysyvät samoina kuin ennen, muut nollataan.
       this.setState({
         valitutKavijat: [],
@@ -529,6 +547,7 @@ class App extends React.Component {
             <br />
             <br />
             <button type="submit">kirjaudu</button>
+            <Ilmoitus viesti={this.state.viesti} />
           </div>
         </form>
       </div>
@@ -607,7 +626,7 @@ class App extends React.Component {
             <Slideri
               name="kesto"
               onChange={this.vaihdaKesto}
-              defaultValue={this.state.kesto}
+              defaultValue={15}
               value={this.state.kesto}
             />
           </div>
@@ -652,6 +671,7 @@ class App extends React.Component {
             <br />
             <br />
           </div>
+          <Ilmoitus viesti={this.state.viesti} />
           <button onClick={this.tietojenLahetys}>Lähetä</button>
         </div>
       </div>
@@ -706,12 +726,7 @@ class App extends React.Component {
     } else {
       sivu = this.mepaForm()
     }
-    return (
-      <div>
-        {sivu}
-        <Notification message={this.state.error} />
-      </div>
-    )
+    return <div>{sivu}</div>
   }
 
   render() {
